@@ -292,9 +292,9 @@
     espera = setTimeout(marcar, 60);
   }, { passive: true });
 
-  if (antes) antes.addEventListener('click', function () { ir(atual() - 1); });
-  if (depois) depois.addEventListener('click', function () { ir(atual() + 1); });
-  pontos.forEach(function (p, i) { p.addEventListener('click', function () { ir(i); }); });
+  if (antes) antes.addEventListener('click', function () { parar(); ir(atual() - 1); });
+  if (depois) depois.addEventListener('click', function () { parar(); ir(atual() + 1); });
+  pontos.forEach(function (p, i) { p.addEventListener('click', function () { parar(); ir(i); }); });
   trilho.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowLeft') { e.preventDefault(); ir(atual() - 1); }
     if (e.key === 'ArrowRight') { e.preventDefault(); ir(atual() + 1); }
@@ -310,6 +310,7 @@
   trilho.addEventListener('pointerdown', function (e) {
     if (e.pointerType === 'touch' || e.button !== 0) return;
     arrastando = true; andou = 0;
+    parar();
     partiuX = e.clientX; partiuScroll = trilho.scrollLeft;
     trilho.style.scrollSnapType = 'none';
     trilho.classList.add('esta-arrastando');
@@ -345,6 +346,40 @@
   [].forEach.call(trilho.querySelectorAll('img'), function (im) {
     im.addEventListener('dragstart', function (e) { e.preventDefault(); });
   });
+
+  // Rolagem automática, quando o trilho pede (data-auto). Para no hover,
+  // no foco do teclado, no arrasto e quando a seção sai da tela. Quem
+  // pediu menos movimento no sistema não recebe rotação nenhuma.
+  var relogio = null;
+  var pouco = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var querAuto = raiz.hasAttribute('data-auto') && !pouco;
+
+  function andar() {
+    if (!querAuto || relogio) return;
+    relogio = setInterval(function () {
+      var i = atual();
+      ir(i + 1 >= itens.length ? 0 : i + 1);
+    }, 3800);
+  }
+  function parar() {
+    if (relogio) { clearInterval(relogio); relogio = null; }
+  }
+  if (querAuto) {
+    raiz.addEventListener('pointerenter', parar);
+    raiz.addEventListener('pointerleave', andar);
+    raiz.addEventListener('focusin', parar);
+    raiz.addEventListener('focusout', function (e) {
+      if (!raiz.contains(e.relatedTarget)) andar();
+    });
+    // fora da tela não faz sentido girar
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) andar(); else parar(); });
+      }, { threshold: 0.2 }).observe(raiz);
+    } else {
+      andar();
+    }
+  }
 
   addEventListener('resize', marcar);
   marcar();
@@ -398,7 +433,7 @@
    ------------------------------------------------------------------ */
 (function circuito() {
   var alvos = document.querySelectorAll(
-    '.anchor,.cta-final,.final,.tempo-sec,.destaque__visual,.abas__lista,' +
+    '.anchor,.cta-final,.final,.tempo-sec,.abas__lista,' +
     '.faixa-escura,.phero:not(.phero--foto)'
   );
   if (!alvos.length || !window.IntersectionObserver) return;

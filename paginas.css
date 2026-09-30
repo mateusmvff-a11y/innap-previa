@@ -686,3 +686,10 @@ dialog.comparar .tabela td{color:var(--ink)}
 .sec--galeria .head .lead{max-width:52ch;margin-inline:auto}
 
 /* o trilho se arrasta com o mouse, então o cursor precisa dizer isso */
+
+/* ------------------------------------- retrato da ficha com mais ar
+   A janela 3:2.1 sobre um retrato 3:3.8 cortava a testa de quem está
+   mais alto no quadro. A janela ficou mais alta e o ponto de leitura
+   subiu, então sobra ar acima da cabeça em vez de faltar. */
+.ficha__foto{aspect-ratio:3/2.7}
+.ficha__img{object-position:center 16%}
