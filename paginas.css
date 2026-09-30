@@ -722,3 +722,10 @@ dialog.comparar .tabela td{color:var(--ink)}
 .flist > .fitem:nth-child(n),
 .flist--2 > .fitem:nth-child(n),.flist--3 > .fitem:nth-child(n),.flist--4 > .fitem:nth-child(n){
   padding-left:var(--pad-f);padding-right:var(--pad-f)}
+
+/* no celular as internas seguem o mesmo respiro da Home: a regra de
+   paginas.css fixava 70px direto no .sec e passava por cima de --sec */
+@media (max-width:640px){
+  .sec{padding-block:var(--sec)}
+  .sec + .sec{padding-top:var(--sec)}
+}
