@@ -9,7 +9,7 @@
 /* ---------------------------------------------------------- migalhas */
 .migalhas{padding:calc(96px + env(safe-area-inset-top,0px)) 0 0}
 .migalhas .wrap{display:flex;align-items:center;gap:10px;font-family:var(--label);
-  font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  font-size:.7rem;font-weight:500;letter-spacing:normal;text-transform:none;color:var(--muted)}
 .migalhas a{color:var(--muted);border-bottom:1px solid transparent;padding-bottom:2px}
 .migalhas a:hover{color:var(--green);border-bottom-color:var(--green)}
 .migalhas i{font-style:normal;opacity:.45}
@@ -52,8 +52,8 @@
 .sec > .wrap > .bloco{display:flex;flex-direction:column;gap:clamp(22px,2.4vw,32px)}
 .sec .head + .bloco,.sec .head-row + .bloco{margin-top:clamp(30px,3.4vw,44px)}
 .acoes{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
-.rotulo{font-family:var(--label);font-size:.72rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--muted)}
+.rotulo{font-family:var(--label);font-size:.72rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--muted)}
 .on-dark .rotulo{color:var(--rose)}
 .mono{font-family:var(--display);font-weight:600}
 ul.marcas{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:9px}
@@ -77,8 +77,8 @@ ul.marcas li::marker{color:var(--green)}
 /* ---------------------------------------------------------- formulário */
 .opcoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px 20px}
 .campo{display:flex;flex-direction:column;gap:7px}
-.campo > span{font-family:var(--label);font-size:.72rem;font-weight:600;letter-spacing:.13em;
-  text-transform:uppercase;color:var(--muted)}
+.campo > span{font-family:var(--label);font-size:.72rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--muted)}
 .campo select,.campo input{font:inherit;font-size:.98rem;color:var(--ink);background:var(--white);
   border:1px solid var(--line);border-radius:12px;padding:.72em .9em;width:100%}
 .opcao{display:flex;align-items:flex-start;gap:10px;padding:.85em 1em;border:1px solid var(--line);
@@ -93,8 +93,8 @@ ul.marcas li::marker{color:var(--green)}
 .tabela-rolo{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tabela{width:100%;border-collapse:collapse;font-size:.95rem;min-width:520px}
 .tabela th,.tabela td{padding:14px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
-.tabela thead th{font-family:var(--label);font-size:.7rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--muted)}
+.tabela thead th{font-family:var(--label);font-size:.7rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--muted)}
 .tabela tbody tr:last-child td{border-bottom:0}
 .tabela tbody tr{transition:background .3s var(--ease)}
 .tabela tbody tr:hover{background:rgba(12,107,94,.045)}
@@ -107,7 +107,7 @@ ul.marcas li::marker{color:var(--green)}
   .tabela tr{border:1px solid var(--line);border-radius:var(--radius);padding:6px 0;margin-bottom:14px}
   .tabela td{border-bottom:0;display:flex;justify-content:space-between;gap:18px;padding:8px 16px}
   .tabela td::before{content:attr(data-rotulo);font-family:var(--label);font-size:.66rem;font-weight:600;
-    letter-spacing:.13em;text-transform:uppercase;color:var(--muted);flex:0 0 auto}
+    letter-spacing:normal;text-transform:none;color:var(--muted);flex:0 0 auto}
 }
 
 /* ---------------------------------------------------------- ficha de professor */
@@ -122,8 +122,8 @@ ul.marcas li::marker{color:var(--green)}
 .ficha__foto--vazia{display:flex;align-items:center;justify-content:center;background:rgba(12,107,94,.1)}
 .ficha__foto--vazia .mono{font-size:2rem;color:var(--green)}
 .ficha__texto{padding:clamp(20px,2.2vw,26px);display:flex;flex-direction:column;gap:9px;flex:1}
-.ficha__texto .area{font-family:var(--label);font-size:.68rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--ochre)}
+.ficha__texto .area{font-family:var(--label);font-size:.68rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--ochre)}
 .ficha__texto h3{font-size:1.2rem;line-height:1.2}
 .ficha__texto p{font-size:.93rem;line-height:1.6;color:var(--muted)}
 .ficha__texto .tlink{margin-top:auto;padding-top:8px}
@@ -144,8 +144,8 @@ ul.marcas li::marker{color:var(--green)}
 .fatos{display:flex;flex-wrap:wrap;gap:10px 28px;padding-top:4px}
 .fatos > div{display:flex;flex-direction:column;gap:2px}
 .fatos b{font-family:var(--display);font-size:1.12rem;font-weight:600;color:var(--ink);line-height:1.15}
-.fatos span{font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--muted)}
+.fatos span{font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--muted)}
 .on-dark .fatos b{color:var(--ivory)}
 .on-dark .fatos span{color:rgba(242,238,231,.66)}
 
@@ -156,11 +156,11 @@ ul.marcas li::marker{color:var(--green)}
   transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .45s}
 .curso:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(12,107,94,.3)}
 .curso__topo{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
-.curso .tag{font-family:var(--label);font-size:.64rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--green)}
+.curso .tag{font-family:var(--label);font-size:.64rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--green)}
 .curso__comparar{display:flex;align-items:center;gap:6px;flex:0 0 auto;
-  font-family:var(--label);font-size:.62rem;font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--muted)}
+  font-family:var(--label);font-size:.62rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--muted)}
 .curso__comparar input{accent-color:var(--green);width:14px;height:14px}
 .curso h3{font-size:1.32rem}
 .curso .desc{font-size:.94rem;line-height:1.6;color:var(--muted);flex:1}
@@ -182,7 +182,7 @@ ul.marcas li::marker{color:var(--green)}
   padding:14px 0;border-bottom:1px solid var(--line)}
 .painel__linha:last-of-type{border-bottom:0}
 .painel__linha .mono,.painel__linha span{font-family:var(--label);font-size:.72rem;font-weight:600;
-  letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+  letter-spacing:normal;text-transform:none;color:var(--muted)}
 .painel__linha h4{font-family:var(--display);font-size:1.5rem;font-weight:600;color:var(--green)}
 .painel__linha p{font-size:.92rem;color:var(--muted)}
 .painel .tabela-rolo{margin-top:4px}
@@ -207,7 +207,7 @@ ul.marcas li::marker{color:var(--green)}
 /* a migalha agora vive dentro do hero */
 .phero .migalhas{padding:0;margin-bottom:clamp(22px,2.6vw,34px);display:flex;
   align-items:center;gap:10px;font-family:var(--label);font-size:.68rem;font-weight:500;
-  letter-spacing:.14em;text-transform:uppercase;color:rgba(242,238,231,.68)}
+  letter-spacing:normal;text-transform:none;color:rgba(242,238,231,.68)}
 .phero .migalhas a{color:rgba(242,238,231,.68);border-bottom:1px solid transparent;padding-bottom:2px}
 .phero .migalhas a:hover{color:var(--ivory);border-bottom-color:rgba(242,238,231,.5)}
 .phero .migalhas i{opacity:.4}
@@ -255,7 +255,7 @@ ul.marcas li::marker{color:var(--green)}
 .tlink:not([href]):hover{gap:.5em;color:var(--muted)}
 .tlink:not([href])::after{content:"a anexar";margin-left:.6em;padding:.2em .6em;border-radius:999px;
   border:1px solid var(--line);font-family:var(--label);font-size:.6rem;font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase}
+  letter-spacing:normal;text-transform:none}
 .on-dark .tlink:not([href]){color:rgba(242,238,231,.6)}
 .on-dark .tlink:not([href])::after{border-color:rgba(242,238,231,.3)}
 
@@ -286,8 +286,8 @@ ul.marcas li::marker{color:var(--green)}
 .definicoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:clamp(18px,2vw,26px);padding-top:6px}
 .definicoes > div{display:flex;flex-direction:column;gap:6px}
-.definicoes span{font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--green)}
+.definicoes span{font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--green)}
 .definicoes p{font-size:.95rem;line-height:1.55;color:var(--muted)}
 .on-dark .definicoes span{color:var(--rose)}
 .on-dark .definicoes p{color:rgba(242,238,231,.84)}
@@ -299,13 +299,13 @@ ul.marcas li::marker{color:var(--green)}
   background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-lg);
   transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .45s}
 .oferta:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:rgba(12,107,94,.3)}
-.oferta .tag{font-family:var(--label);font-size:.64rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--green)}
+.oferta .tag{font-family:var(--label);font-size:.64rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--green)}
 .oferta h3{font-size:1.28rem}
 .oferta .desc{font-size:.94rem;line-height:1.6;color:var(--muted)}
 .oferta__estado{align-self:flex-start;padding:.4em .85em;border-radius:999px;
   background:rgba(12,107,94,.09);color:var(--green);
-  font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase}
+  font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:normal;text-transform:none}
 .oferta .fatos,.oferta .definicoes{margin-top:4px;padding-top:16px;border-top:1px solid var(--line);
   display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
 .oferta .fatos b{font-size:1rem}
@@ -437,7 +437,7 @@ ul.marcas li::marker{color:var(--green)}
 .barra-comparar p{display:flex;align-items:baseline;gap:8px}
 .barra-comparar b{font-family:var(--display);font-size:1.4rem;color:var(--ivory)}
 .barra-comparar span{font-family:var(--label);font-size:.7rem;font-weight:500;
-  letter-spacing:.14em;text-transform:uppercase;color:rgba(242,238,231,.7)}
+  letter-spacing:normal;text-transform:none;color:rgba(242,238,231,.7)}
 .barra-comparar > .wrap > div{display:flex;gap:10px;flex-wrap:wrap}
 .barra-comparar .btn-ghost{border-color:rgba(242,238,231,.36);color:var(--ivory)}
 .barra-comparar .btn-ghost:hover{border-color:var(--ivory)}
@@ -447,7 +447,7 @@ ul.marcas li::marker{color:var(--green)}
 dialog.comparar{max-width:min(940px,94vw)}
 dialog.comparar .tabela{min-width:0}
 dialog.comparar .tabela th[scope=row]{font-family:var(--label);font-size:.7rem;font-weight:600;
-  letter-spacing:.13em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  letter-spacing:normal;text-transform:none;color:var(--muted);white-space:nowrap}
 dialog.comparar .tabela thead th{font-family:var(--display);font-size:1.05rem;font-weight:600;
   letter-spacing:0;text-transform:none;color:var(--ink)}
 dialog.comparar .tabela td{color:var(--ink)}
@@ -475,8 +475,8 @@ dialog.comparar .tabela td{color:var(--ink)}
 .fatos{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
   gap:clamp(20px,2.2vw,30px) clamp(24px,2.6vw,36px)}
 .fatos > div{display:flex;flex-direction:column;gap:7px}
-.fatos span{font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--green-2);order:-1}
+.fatos span{font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:normal;
+  text-transform:none;color:var(--green-2);order:-1}
 .fatos b{font-family:var(--display);font-size:1.18rem;font-weight:600;line-height:1.25;color:var(--ink)}
 .fatos--longo{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
 .fatos--longo b{font-family:var(--sans);font-size:1rem;font-weight:500;line-height:1.5;color:var(--ink)}
@@ -590,7 +590,7 @@ dialog.comparar .tabela td{color:var(--ink)}
 .sec--claro{position:relative;background:var(--paper)}
 /* a modalidade do curso vira etiqueta, com mais presença */
 .curso .tag,.oferta .tag{align-self:flex-start;padding:.42em .85em;border-radius:999px;
-  background:rgba(12,107,94,.09);color:var(--green-2);letter-spacing:.1em}
+  background:rgba(12,107,94,.09);color:var(--green-2);letter-spacing:normal}
 .on-dark .curso .tag,.on-dark .oferta .tag{background:rgba(242,238,231,.14);color:var(--rose)}
 .curso:hover .tag,.oferta:hover .tag{background:rgba(12,107,94,.14)}
 
@@ -606,33 +606,57 @@ dialog.comparar .tabela td{color:var(--ink)}
 .orienta .lead__copy h2{font-size:clamp(1.6rem,2.8vw,2.3rem);margin:12px 0 12px}
 .orienta .lead__ok{padding:28px 0 8px}
 
-/* ---------------------------------------------------------- carrossel */
-.carrossel{position:relative;margin-top:clamp(30px,3.4vw,44px);border-radius:var(--radius-lg);
-  overflow:hidden;background:var(--graphite);z-index:1}
-.carrossel__trilho{position:relative;aspect-ratio:16/9}
-.carrossel__item{position:absolute;inset:0;margin:0;opacity:0;
-  transition:opacity .6s var(--ease);pointer-events:none}
-.carrossel__item[data-atual]{opacity:1;pointer-events:auto}
-.carrossel__item img{width:100%;height:100%;object-fit:cover}
-.carrossel__seta{position:absolute;top:50%;translate:0 -50%;z-index:2;
-  width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:rgba(31,38,38,.62);color:var(--ivory);backdrop-filter:blur(6px);
-  transition:background .3s var(--ease),transform .3s var(--ease)}
-.carrossel__seta:hover{background:rgba(31,38,38,.86);transform:translateY(-1px)}
-.carrossel__seta svg{width:22px;height:22px}
-.carrossel__seta--antes{left:16px}
-.carrossel__seta--depois{right:16px}
-.carrossel__pontos{position:absolute;left:50%;bottom:18px;translate:-50% 0;z-index:2;
-  display:flex;gap:8px;padding:.5em .8em;border-radius:999px;background:rgba(31,38,38,.5);
-  backdrop-filter:blur(6px)}
-.carrossel__ponto{width:8px;height:8px;border-radius:50%;background:rgba(242,238,231,.45);
-  transition:background .3s var(--ease),width .3s var(--ease)}
-.carrossel__ponto.is-on{background:var(--ivory);width:22px;border-radius:999px}
-@media (max-width:620px){
-  .carrossel__seta{width:38px;height:38px}
-  .carrossel__seta--antes{left:8px}.carrossel__seta--depois{right:8px}
+/* ---------------------------------------------------------- carrossel
+   Trilho de rolagem com scroll-snap, não pilha trocando por opacidade.
+   A rolagem é nativa: arrastar com o dedo ou com o trackpad funciona
+   sem JavaScript nenhum. A foto seguinte fica espiando na borda, que é
+   o que avisa que há mais. Nada gira sozinho. */
+.carrossel{position:relative;margin-top:clamp(30px,3.4vw,44px)}
+.carrossel__trilho{display:flex;gap:clamp(12px,1.4vw,18px);margin:0;padding:0 0 4px;list-style:none;
+  overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.carrossel__trilho::-webkit-scrollbar{display:none}
+.carrossel__trilho:focus-visible{outline:2px solid var(--rose);outline-offset:6px;border-radius:var(--radius-lg)}
+.carrossel__item{flex:0 0 min(88%,1000px);scroll-snap-align:center}
+.carrossel__item figure{margin:0}
+.carrossel__item img{width:100%;aspect-ratio:16/9;object-fit:cover;
+  border-radius:var(--radius-lg);background:rgba(242,238,231,.06)}
+.carrossel__item figcaption{margin-top:12px;font-family:var(--sans);font-size:.9rem;
+  color:rgba(242,238,231,.72);line-height:1.5}
+/* a foto que não está no centro recua um passo, para o olho saber
+   onde está a leitura */
+.carrossel__item{transition:opacity .4s var(--ease)}
+@supports (animation-timeline:view()){
+  .carrossel__item{animation:carrosselFoco linear both;animation-timeline:view(inline);
+    animation-range:cover 12% cover 88%}
+  @keyframes carrosselFoco{0%,100%{opacity:.42}45%,55%{opacity:1}}
 }
 
+.carrossel__barra{margin-top:clamp(18px,2vw,26px);display:flex;align-items:center;
+  gap:16px 22px;flex-wrap:wrap}
+.carrossel__pontos{display:flex;align-items:center;gap:8px}
+.carrossel__ponto{width:9px;height:9px;padding:0;border-radius:50%;
+  background:rgba(242,238,231,.34);transition:background .3s var(--ease),width .3s var(--ease)}
+.carrossel__ponto:hover{background:rgba(242,238,231,.6)}
+.carrossel__ponto[aria-current]{background:var(--rose);width:26px;border-radius:999px}
+.carrossel__conta{font-family:var(--sans);font-size:.88rem;color:rgba(242,238,231,.7)}
+.carrossel__conta b{color:var(--ivory);font-weight:600}
+.carrossel__setas{margin-left:auto;display:flex;gap:10px}
+.carrossel__seta{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(242,238,231,.3);color:var(--ivory);background:transparent;
+  transition:border-color .3s var(--ease),background .3s var(--ease),opacity .3s var(--ease)}
+.carrossel__seta:hover:not(:disabled){border-color:var(--ivory);background:rgba(242,238,231,.12)}
+.carrossel__seta:disabled{opacity:.3;cursor:default}
+.carrossel__seta svg{width:21px;height:21px}
+@media (max-width:620px){
+  .carrossel__item{flex-basis:92%}
+  .carrossel__setas{margin-left:0}
+  .carrossel__seta{width:40px;height:40px}
+}
+@media (prefers-reduced-motion:reduce){
+  .carrossel__trilho{scroll-behavior:auto}
+  .carrossel__item{animation:none;opacity:1}
+}
 /* ---------------------------------------------- filtro de perfil */
 /* display:flex nos cartões vence o hidden do navegador */
 [hidden]{display:none!important}
@@ -673,3 +697,23 @@ dialog.comparar .tabela td{color:var(--ink)}
 .curso__acoes .curso__comparar{margin-left:0}
 .curso__topo{display:block}
 .curso .tag{display:inline-block}
+
+/* ------------------------------------------- fileira de botões
+   "Formações relacionadas" eram três links de seta empilhados, com
+   alvo de clique do tamanho da palavra. Viraram botões numa linha. */
+.botoes{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.btn-mini{font-size:.93rem;padding:.6em 1.05em;border-radius:999px}
+.botoes .btn-ghost{background:var(--paper)}
+.botoes .btn-ghost .arw{transition:transform .35s var(--ease)}
+.botoes .btn-ghost:hover .arw{transform:translateX(3px)}
+.on-dark .botoes .btn-ghost{background:rgba(242,238,231,.06);border-color:rgba(242,238,231,.26);color:var(--ivory)}
+.on-dark .botoes .btn-ghost:hover{border-color:var(--ivory);color:var(--ivory)}
+
+/* o aceite do formulário: caixa à esquerda, texto à direita, sempre */
+.lead__aceite{flex-direction:row!important;align-items:flex-start;gap:11px;
+  font-family:var(--sans);font-size:.94rem;font-weight:400;color:var(--ink);line-height:1.5}
+.lead__aceite input{width:19px;height:19px;flex:0 0 auto;margin:1px 0 0;accent-color:var(--green)}
+.lead__aceite span{flex:1 1 auto}
+
+/* a galeria respira mais que uma seção comum: a foto é o conteúdo */
+.sec--galeria .head{max-width:56ch}

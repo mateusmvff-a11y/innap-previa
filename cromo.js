@@ -230,34 +230,61 @@
 (function carrossel() {
   var raiz = document.querySelector('[data-carrossel]');
   if (!raiz) return;
+  var trilho = raiz.querySelector('[data-trilho]');
   var itens = [].slice.call(raiz.querySelectorAll('.carrossel__item'));
-  var pontos = [].slice.call(raiz.querySelectorAll('.carrossel__ponto'));
+  var pontos = [].slice.call(raiz.querySelectorAll('[data-ir]'));
+  var antes = raiz.querySelector('[data-antes]');
+  var depois = raiz.querySelector('[data-depois]');
+  var conta = raiz.querySelector('[data-conta]');
   if (itens.length < 2) return;
-  var atual = 0, relogio = null;
-  var pouco = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var suave = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
-  function mostrar(i) {
-    atual = (i + itens.length) % itens.length;
-    itens.forEach(function (f, j) {
-      if (j === atual) f.setAttribute('data-atual', ''); else f.removeAttribute('data-atual');
+  // qual foto está no centro do trilho agora
+  function atual() {
+    var meio = trilho.scrollLeft + trilho.clientWidth / 2;
+    var melhor = 0, menor = Infinity;
+    itens.forEach(function (it, i) {
+      var c = it.offsetLeft + it.offsetWidth / 2;
+      var d = Math.abs(c - meio);
+      if (d < menor) { menor = d; melhor = i; }
     });
-    pontos.forEach(function (p, j) { p.classList.toggle('is-on', j === atual); });
+    return melhor;
   }
-  function andar() { if (!pouco) relogio = setInterval(function () { mostrar(atual + 1); }, 5000); }
-  function parar() { if (relogio) { clearInterval(relogio); relogio = null; } }
-  function irPara(i) { parar(); mostrar(i); andar(); }
 
-  raiz.querySelector('[data-antes]').addEventListener('click', function () { irPara(atual - 1); });
-  raiz.querySelector('[data-depois]').addEventListener('click', function () { irPara(atual + 1); });
-  pontos.forEach(function (p, i) { p.addEventListener('click', function () { irPara(i); }); });
-  raiz.addEventListener('mouseenter', parar);
-  raiz.addEventListener('mouseleave', andar);
-  raiz.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowLeft') { e.preventDefault(); irPara(atual - 1); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); irPara(atual + 1); }
+  function ir(i) {
+    var alvo = itens[Math.max(0, Math.min(itens.length - 1, i))];
+    trilho.scrollTo({ left: alvo.offsetLeft - trilho.offsetLeft, behavior: suave });
+  }
+
+  function marcar() {
+    var i = atual();
+    pontos.forEach(function (p, j) {
+      if (j === i) p.setAttribute('aria-current', 'true'); else p.removeAttribute('aria-current');
+    });
+    if (conta) conta.textContent = i + 1;
+    // nas pontas a seta desliga em vez de virar a volta: o trilho tem
+    // começo e fim visíveis, dar a volta confunde
+    antes.disabled = trilho.scrollLeft < 4;
+    depois.disabled = trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4;
+  }
+
+  var espera = null;
+  trilho.addEventListener('scroll', function () {
+    if (espera) cancelAnimationFrame(espera);
+    espera = requestAnimationFrame(marcar);
+  }, { passive: true });
+
+  antes.addEventListener('click', function () { ir(atual() - 1); });
+  depois.addEventListener('click', function () { ir(atual() + 1); });
+  pontos.forEach(function (p, i) { p.addEventListener('click', function () { ir(i); }); });
+  trilho.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); ir(atual() - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); ir(atual() + 1); }
+    if (e.key === 'Home') { e.preventDefault(); ir(0); }
+    if (e.key === 'End') { e.preventDefault(); ir(itens.length - 1); }
   });
-  mostrar(0);
-  andar();
+  addEventListener('resize', marcar);
+  marcar();
 })();
 
 /* ------------------------------------------------------------------
