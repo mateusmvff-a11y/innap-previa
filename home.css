@@ -1345,3 +1345,16 @@ label.tem-erro .lead__rot{color:#9E3B2E}
   .depo-wrap{margin-top:calc(-1 * clamp(24px,6vw,40px))}
   .depo{padding:26px 22px 24px}
 }
+
+/* O recuo lateral é igual em todo cartão, e precisa vencer as regras
+   antigas de nth-child que zeravam o recuo do primeiro de cada linha.
+   Sem isto, no celular o texto de metade dos cartões encostava na
+   borda da tela enquanto o da outra metade ficava 20px para dentro. */
+.flist > .fitem:nth-child(n){padding-left:var(--pad-f);padding-right:var(--pad-f)}
+@media (max-width:1000px){
+  .flist > .fitem:nth-child(n){padding-left:var(--pad-f);padding-right:var(--pad-f)}
+}
+@media (max-width:640px){
+  .flist > .fitem:nth-child(n){padding-left:var(--pad-f);padding-right:var(--pad-f);
+    padding-top:26px;padding-bottom:26px}
+}

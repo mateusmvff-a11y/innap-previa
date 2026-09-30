@@ -719,3 +719,6 @@ dialog.comparar .tabela td{color:var(--ink)}
   .botoes .btn-mini{padding:.62em 1em}
   .migalhas{margin-bottom:18px}
 }
+.flist > .fitem:nth-child(n),
+.flist--2 > .fitem:nth-child(n),.flist--3 > .fitem:nth-child(n),.flist--4 > .fitem:nth-child(n){
+  padding-left:var(--pad-f);padding-right:var(--pad-f)}
