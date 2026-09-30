@@ -289,6 +289,51 @@
     if (e.key === 'Home') { e.preventDefault(); ir(0); }
     if (e.key === 'End') { e.preventDefault(); ir(itens.length - 1); }
   });
+  // Arrastar com o mouse, como já acontece no toque e no trackpad.
+  // O scroll-snap é desligado durante o arrasto: com ele ligado o
+  // navegador puxa de volta para o encaixe a cada quadro e o trilho
+  // treme na mão. Ao soltar, o snap volta e a foto mais próxima assume.
+  var arrastando = false, partiuX = 0, partiuScroll = 0, andou = 0;
+
+  trilho.addEventListener('pointerdown', function (e) {
+    if (e.pointerType === 'touch' || e.button !== 0) return;
+    arrastando = true; andou = 0;
+    partiuX = e.clientX; partiuScroll = trilho.scrollLeft;
+    trilho.style.scrollSnapType = 'none';
+    trilho.classList.add('esta-arrastando');
+    trilho.setPointerCapture(e.pointerId);
+  });
+
+  trilho.addEventListener('pointermove', function (e) {
+    if (!arrastando) return;
+    var d = e.clientX - partiuX;
+    if (Math.abs(d) > 3) andou = Math.abs(d);
+    trilho.scrollLeft = partiuScroll - d;
+  });
+
+  function soltar(e) {
+    if (!arrastando) return;
+    arrastando = false;
+    trilho.classList.remove('esta-arrastando');
+    if (e && e.pointerId != null && trilho.hasPointerCapture(e.pointerId)) {
+      trilho.releasePointerCapture(e.pointerId);
+    }
+    trilho.style.scrollSnapType = '';
+    ir(atual());
+    marcar();
+  }
+  trilho.addEventListener('pointerup', soltar);
+  trilho.addEventListener('pointercancel', soltar);
+  trilho.addEventListener('pointerleave', soltar);
+  // depois de arrastar, o clique que vem junto não deve abrir nada
+  trilho.addEventListener('click', function (e) {
+    if (andou > 3) { e.preventDefault(); e.stopPropagation(); andou = 0; }
+  }, true);
+  // o navegador tenta arrastar a imagem como arquivo; isso atrapalha
+  [].forEach.call(trilho.querySelectorAll('img'), function (im) {
+    im.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  });
+
   addEventListener('resize', marcar);
   marcar();
 })();

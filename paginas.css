@@ -730,3 +730,13 @@ dialog.comparar .tabela td{color:var(--ink)}
 /* o formulário solto usa o mesmo desenho de coluna única do diálogo */
 .orienta .lead__form{max-width:560px}
 .orienta{max-width:760px;margin-inline:auto}
+
+/* ------------------------------------- galeria: texto centralizado */
+.sec--galeria .head{max-width:56ch;margin-inline:auto;text-align:center;align-items:center}
+.sec--galeria .head .eyebrow{justify-content:center}
+.sec--galeria .head .lead{max-width:52ch;margin-inline:auto}
+
+/* o trilho se arrasta com o mouse, então o cursor precisa dizer isso */
+.carrossel__trilho{cursor:grab}
+.carrossel__trilho.esta-arrastando{cursor:grabbing;scroll-behavior:auto;user-select:none}
+.carrossel__trilho.esta-arrastando img{pointer-events:none}
