@@ -164,3 +164,98 @@
   });
   atualizar();
 })();
+
+/* ============================================================
+   Filtro dos conteúdos
+   As pastilhas filtram os cartões pela tarja de categoria.
+   "Todos" mostra tudo; o que não casa com nenhuma pastilha
+   continua aparecendo só em "Todos".
+   ============================================================ */
+(function filtroConteudos() {
+  var barra = document.querySelector('.pilulas');
+  var grade = document.querySelector('.arts');
+  if (!barra || !grade) return;
+  var botoes = [].slice.call(barra.querySelectorAll('.pilula'));
+  var cartoes = [].slice.call(grade.querySelectorAll('.art'));
+  if (botoes.length < 2 || !cartoes.length) return;
+
+  function normal(s) {
+    return (s || '').trim().toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '');
+  }
+  function categoria(c) {
+    var k = c.querySelector('.kicker');
+    return normal(k ? k.textContent : '');
+  }
+
+  function aplicar(alvo) {
+    var todos = normal(alvo) === 'todos';
+    var n = 0;
+    cartoes.forEach(function (c) {
+      var mostra = todos || categoria(c) === normal(alvo);
+      c.hidden = !mostra;
+      if (mostra) n++;
+    });
+    botoes.forEach(function (b) {
+      var on = normal(b.textContent) === normal(alvo);
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-pressed', String(on));
+    });
+    grade.setAttribute('data-vazio', String(n === 0));
+  }
+
+  botoes.forEach(function (b) {
+    b.setAttribute('type', 'button');
+    b.addEventListener('click', function () { aplicar(b.textContent); });
+  });
+  aplicar(botoes[0].textContent);
+})();
+
+/* formulários fora do diálogo: mesma resposta ao enviar */
+(function formularioSolto() {
+  [].forEach.call(document.querySelectorAll('.orienta [data-lead-form]'), function (f) {
+    var ok = f.parentElement.querySelector('.lead__ok');
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      f.hidden = true;
+      if (ok) { ok.hidden = false; ok.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+    });
+  });
+})();
+
+/* ============================================================
+   Carrossel de fotos
+   Setas, pontos, teclado e avanço automático que pausa no hover.
+   ============================================================ */
+(function carrossel() {
+  var raiz = document.querySelector('[data-carrossel]');
+  if (!raiz) return;
+  var itens = [].slice.call(raiz.querySelectorAll('.carrossel__item'));
+  var pontos = [].slice.call(raiz.querySelectorAll('.carrossel__ponto'));
+  if (itens.length < 2) return;
+  var atual = 0, relogio = null;
+  var pouco = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function mostrar(i) {
+    atual = (i + itens.length) % itens.length;
+    itens.forEach(function (f, j) {
+      if (j === atual) f.setAttribute('data-atual', ''); else f.removeAttribute('data-atual');
+    });
+    pontos.forEach(function (p, j) { p.classList.toggle('is-on', j === atual); });
+  }
+  function andar() { if (!pouco) relogio = setInterval(function () { mostrar(atual + 1); }, 5000); }
+  function parar() { if (relogio) { clearInterval(relogio); relogio = null; } }
+  function irPara(i) { parar(); mostrar(i); andar(); }
+
+  raiz.querySelector('[data-antes]').addEventListener('click', function () { irPara(atual - 1); });
+  raiz.querySelector('[data-depois]').addEventListener('click', function () { irPara(atual + 1); });
+  pontos.forEach(function (p, i) { p.addEventListener('click', function () { irPara(i); }); });
+  raiz.addEventListener('mouseenter', parar);
+  raiz.addEventListener('mouseleave', andar);
+  raiz.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); irPara(atual - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); irPara(atual + 1); }
+  });
+  mostrar(0);
+  andar();
+})();

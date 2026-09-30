@@ -37,7 +37,9 @@
   --shadow:0 24px 60px -40px rgba(0,54,64,.26);
   --shadow-sm:0 10px 26px -20px rgba(0,54,64,.3);
   --ease:cubic-bezier(.22,.61,.36,1);
-  --pattern:url("textura.svg");
+  --circuito:url("circuito-escuro.svg");
+  --circuito-claro:url("circuito-claro.svg");
+  --pattern:var(--circuito);
 }
 
 *{box-sizing:border-box}
@@ -206,7 +208,7 @@ h2 .accent{color:var(--green)}
 
 /* ============================================================ NATUROPATIA */
 .anchor{background:var(--petrol);color:var(--ivory);border-radius:var(--radius-lg);overflow:hidden;position:relative}
-.anchor::before{content:"";position:absolute;inset:0;background-image:var(--pattern);background-size:240px 240px;pointer-events:none}
+.anchor::before{content:"";position:absolute;inset:0;background-image:var(--pattern);background-size:360px 360px;pointer-events:none}
 .anchor-inner{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,70px);padding:clamp(40px,5.5vw,80px);align-items:center;position:relative;z-index:1}
 .anchor .kicker{display:flex;align-items:center;gap:16px;margin-bottom:24px}
 .anchor .kicker .n{font-family:var(--display);font-size:clamp(2.4rem,5vw,4rem);font-weight:600;color:var(--ochre);line-height:.8}
@@ -331,7 +333,7 @@ h2 .accent{color:var(--green)}
 
 /* ============================================================ CTA FINAL */
 .cta-final{background:var(--green);color:var(--ivory);border-radius:var(--radius-lg);padding:clamp(48px,7vw,100px) clamp(30px,5vw,80px);text-align:center;position:relative;overflow:hidden}
-.cta-final::before{content:"";position:absolute;inset:0;background-image:var(--pattern);background-size:240px 240px;pointer-events:none}
+.cta-final::before{content:"";position:absolute;inset:0;background-image:var(--pattern);background-size:360px 360px;pointer-events:none}
 .cta-final > *{position:relative;z-index:1}
 .cta-final .eyebrow{color:var(--rose);justify-content:center}
 .cta-final h2{font-size:clamp(2rem,4.4vw,3.4rem);color:var(--ivory);max-width:19ch;margin:22px auto 0}
@@ -546,7 +548,7 @@ h2 .accent{color:var(--green)}
 }
 .destaque__visual::before{
   content:"";position:absolute;inset:0;
-  background-image:var(--pattern);background-size:210px 210px;opacity:.9;
+  background-image:var(--pattern);background-size:330px 330px;opacity:.9;
 }
 .destaque__visual::after{
   content:"";position:absolute;inset:0;
@@ -651,7 +653,7 @@ h2 .accent{color:var(--green)}
 }
 .final::before{
   content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:var(--pattern);background-size:240px 240px;opacity:.55;
+  background-image:var(--pattern);background-size:360px 360px;opacity:.55;
 }
 .final > div{position:relative;z-index:1;max-width:1200px;margin-inline:auto;display:flex;flex-direction:column;align-items:center}
 .final .eyebrow{color:var(--rose);justify-content:center}
@@ -701,7 +703,7 @@ h2 .accent{color:var(--green)}
 .tempo-sec{position:relative;background:var(--petrol);color:var(--ivory);overflow:hidden}
 .tempo-sec::before{
   content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:var(--pattern);background-size:240px 240px;opacity:.5;
+  background-image:var(--pattern);background-size:360px 360px;opacity:.5;
 }
 .tempo-sec > .wrap{position:relative;z-index:1}
 
@@ -924,3 +926,48 @@ figure.tempo__frase figcaption{margin-top:16px;font-family:var(--label);font-siz
   padding-left:8px;border-left:1px solid rgba(242,238,231,.28)}
 @media (max-width:700px){.selo-previa span{display:none}}
 @media print{.selo-previa{display:none}}
+
+/* ---------------------------------------------------------- abas de perfil
+   Lista vertical à esquerda, painel à direita. Substitui a sanfona. */
+.abas{display:grid;grid-template-columns:clamp(240px,26%,320px) 1fr;
+  margin-top:clamp(40px,4.5vw,60px);border:1px solid var(--line);border-radius:var(--radius-lg);
+  overflow:hidden;background:var(--white)}
+.abas__lista{display:flex;flex-direction:column;background:var(--graphite)}
+.abas__aba{position:relative;display:flex;align-items:center;gap:14px;
+  padding:clamp(22px,2.4vw,30px) clamp(20px,2.2vw,28px);text-align:left;
+  color:rgba(242,238,231,.68);border-bottom:1px solid rgba(242,238,231,.1);
+  transition:color .3s var(--ease),background .3s var(--ease)}
+.abas__aba:last-child{border-bottom:0}
+.abas__aba::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--ochre);transform:scaleY(0);transform-origin:center;
+  transition:transform .35s var(--ease)}
+.abas__aba:hover{color:var(--ivory);background:rgba(242,238,231,.05)}
+.abas__aba.is-on{color:var(--ivory);background:rgba(242,238,231,.08)}
+.abas__aba.is-on::before{transform:scaleY(1)}
+.abas__n{font-family:var(--label);font-size:.66rem;font-weight:600;letter-spacing:.14em;
+  color:rgba(242,238,231,.42)}
+.abas__aba.is-on .abas__n{color:var(--ochre)}
+.abas__rot{font-family:var(--sans);font-size:1rem;font-weight:600;letter-spacing:-.005em}
+
+.abas__palco{padding:clamp(30px,3.4vw,46px) clamp(28px,3.2vw,44px)}
+.abas__painel{display:flex;flex-direction:column;align-items:flex-start}
+.abas__painel[hidden]{display:none}
+.abas__painel .eyebrow{color:var(--ochre)}
+.abas__painel h3{margin-top:16px;font-size:clamp(1.5rem,2.6vw,2.15rem);max-width:20ch;line-height:1.12}
+.abas__painel > p{margin-top:16px;max-width:52ch;color:var(--muted);font-size:var(--fs-lead);line-height:1.6}
+.abas__painel .tlink{margin-top:26px}
+.anim .abas__painel > *{opacity:0;transform:translateY(8px);
+  transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.anim .abas__painel.is-on > *{opacity:1;transform:none}
+.anim .abas__painel.is-on > *:nth-child(2){transition-delay:.05s}
+.anim .abas__painel.is-on > *:nth-child(3){transition-delay:.1s}
+.anim .abas__painel.is-on > *:nth-child(4){transition-delay:.15s}
+@media (max-width:860px){
+  .abas{grid-template-columns:1fr}
+  .abas__lista{flex-direction:row;overflow-x:auto}
+  .abas__aba{flex:1 0 auto;border-bottom:0;border-right:1px solid rgba(242,238,231,.1);
+    flex-direction:column;align-items:flex-start;gap:6px}
+  .abas__aba::before{top:auto;bottom:0;left:0;right:0;width:auto;height:3px;
+    transform:scaleX(0);transform-origin:left}
+  .abas__aba.is-on::before{transform:scaleX(1)}
+}

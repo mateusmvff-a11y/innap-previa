@@ -12,8 +12,39 @@
 
   /* topo, menu do celular e diálogo saíram para cromo.js */
 
-  /* ---------------------------------------------------------- jornada
-     Funciona com ou sem GSAP: a altura do painel é medida na hora. */
+  /* ---------------------------------------------------------- abas de perfil
+     Lista vertical à esquerda, painel à direita. Sem GSAP também troca. */
+  (function abas() {
+    var raiz = document.querySelector('[data-abas]');
+    if (!raiz) return;
+    var botoes = [].slice.call(raiz.querySelectorAll('.abas__aba'));
+    var paineis = [].slice.call(raiz.querySelectorAll('.abas__painel'));
+    function mostrar(i) {
+      botoes.forEach(function (b, j) {
+        b.classList.toggle('is-on', j === i);
+        b.setAttribute('aria-selected', String(j === i));
+      });
+      paineis.forEach(function (p, j) {
+        p.hidden = j !== i;
+        p.classList.toggle('is-on', j === i);
+      });
+    }
+    botoes.forEach(function (b, i) {
+      b.addEventListener('click', function () { mostrar(i); });
+      b.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1
+              : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        var n = (i + d + botoes.length) % botoes.length;
+        botoes[n].focus(); mostrar(n);
+      });
+    });
+    mostrar(0);
+  })();
+
+  /* ---------------------------------------------------------- sanfona antiga
+     Só roda se alguma página ainda usar o formato de blocos que abrem. */
   (function jornada() {
     var raiz = document.querySelector('[data-jornada]');
     if (!raiz) return;

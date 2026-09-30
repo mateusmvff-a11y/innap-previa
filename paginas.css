@@ -579,3 +579,59 @@ dialog.comparar .tabela td{color:var(--ink)}
   .flist--2 .fitem,.flist--3 .fitem,.flist--4 .fitem{--placa-e:-20px;--placa-d:-20px}
   .flist--2 .fitem:nth-child(even),.flist--3 .fitem:nth-child(even),.flist--4 .fitem:nth-child(even){--placa-e:8px}
 }
+
+/* ============================================================
+   AJUSTES DO CLIENTE
+   ============================================================ */
+
+/* o circuito da marca no tamanho novo e em fundo claro onde couber */
+.faixa-escura::before,.phero:not(.phero--foto)::before{background-size:360px 360px}
+.sec--claro{position:relative;overflow:hidden}
+.sec--claro::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:var(--circuito-claro);background-size:360px 360px;opacity:.5}
+.sec--claro > .wrap{position:relative;z-index:1}
+
+/* a modalidade do curso vira etiqueta, com mais presença */
+.curso .tag,.oferta .tag{align-self:flex-start;padding:.42em .85em;border-radius:999px;
+  background:rgba(12,107,94,.09);color:var(--green-2);letter-spacing:.1em}
+.on-dark .curso .tag,.on-dark .oferta .tag{background:rgba(242,238,231,.14);color:var(--rose)}
+.curso:hover .tag,.oferta:hover .tag{background:rgba(12,107,94,.14)}
+
+/* filtro dos conteúdos */
+.art[hidden]{display:none}
+.arts[data-vazio="true"]::after{content:"Nenhum conteúdo nesta categoria por enquanto.";
+  grid-column:1/-1;color:var(--muted);font-size:.95rem}
+
+/* pedido de orientação solto na página */
+.orienta{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:clamp(28px,3.4vw,48px);box-shadow:var(--shadow-sm);position:relative;z-index:1}
+.orienta .lead__copy{max-width:56ch;margin-bottom:clamp(26px,3vw,36px)}
+.orienta .lead__copy h2{font-size:clamp(1.6rem,2.8vw,2.3rem);margin:12px 0 12px}
+.orienta .lead__ok{padding:28px 0 8px}
+
+/* ---------------------------------------------------------- carrossel */
+.carrossel{position:relative;margin-top:clamp(30px,3.4vw,44px);border-radius:var(--radius-lg);
+  overflow:hidden;background:var(--graphite);z-index:1}
+.carrossel__trilho{position:relative;aspect-ratio:16/9}
+.carrossel__item{position:absolute;inset:0;margin:0;opacity:0;
+  transition:opacity .6s var(--ease);pointer-events:none}
+.carrossel__item[data-atual]{opacity:1;pointer-events:auto}
+.carrossel__item img{width:100%;height:100%;object-fit:cover}
+.carrossel__seta{position:absolute;top:50%;translate:0 -50%;z-index:2;
+  width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(31,38,38,.62);color:var(--ivory);backdrop-filter:blur(6px);
+  transition:background .3s var(--ease),transform .3s var(--ease)}
+.carrossel__seta:hover{background:rgba(31,38,38,.86);transform:translateY(-1px)}
+.carrossel__seta svg{width:22px;height:22px}
+.carrossel__seta--antes{left:16px}
+.carrossel__seta--depois{right:16px}
+.carrossel__pontos{position:absolute;left:50%;bottom:18px;translate:-50% 0;z-index:2;
+  display:flex;gap:8px;padding:.5em .8em;border-radius:999px;background:rgba(31,38,38,.5);
+  backdrop-filter:blur(6px)}
+.carrossel__ponto{width:8px;height:8px;border-radius:50%;background:rgba(242,238,231,.45);
+  transition:background .3s var(--ease),width .3s var(--ease)}
+.carrossel__ponto.is-on{background:var(--ivory);width:22px;border-radius:999px}
+@media (max-width:620px){
+  .carrossel__seta{width:38px;height:38px}
+  .carrossel__seta--antes{left:8px}.carrossel__seta--depois{right:8px}
+}

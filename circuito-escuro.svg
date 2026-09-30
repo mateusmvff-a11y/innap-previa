@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360" viewBox="0 0 360 360">
+<!-- Mesmo desenho do circuito claro, em marfim, para os fundos escuros. -->
+<g fill="none" stroke-linecap="round">
+  <path d="M0 80 H60 Q100 80 100 120 V160 Q100 200 140 200 H220 Q260 200 260 160 V120 Q260 80 300 80 H360"
+        stroke="#F2EEE7" stroke-opacity=".17" stroke-width="2.2"/>
+  <path d="M0 280 H40 Q80 280 80 240 V200 Q80 160 120 160 H200 Q240 160 240 200 V240 Q240 280 280 280 H360"
+        stroke="#F2EEE7" stroke-opacity=".09" stroke-width="1.4"/>
+  <path d="M320 0 V60 Q320 100 280 100 H240 Q200 100 200 140 V260 Q200 300 240 300 H280 Q320 300 320 340 V360"
+        stroke="#F2EEE7" stroke-opacity=".12" stroke-width="1.8"/>
+</g>
+<g fill="#F2EEE7">
+  <circle cx="200" cy="200" r="5" fill-opacity=".26"/>
+  <circle cx="100" cy="140" r="4" fill-opacity=".18"/>
+  <circle cx="280" cy="280" r="4" fill-opacity=".14"/>
+  <circle cx="80" cy="240" r="3.4" fill-opacity=".12"/>
+</g>
+</svg>
