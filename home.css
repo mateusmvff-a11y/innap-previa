@@ -1000,7 +1000,7 @@ figure.tempo__frase figcaption{margin-top:16px;font-family:var(--label);font-siz
 .abas__aba::before{background:var(--rose)}
 .abas__aba:hover{background:rgba(242,238,231,.06)}
 .abas__aba.is-on{background:rgba(242,238,231,.1)}
-.abas__n{color:rgba(242,238,231,.46)}
+.abas__n{color:rgba(242,238,231,.62)}  /* .46 dava 3,6:1 num rótulo de 10px */
 .abas__aba.is-on .abas__n{color:var(--rose)}
 /* o eyebrow do painel está sobre fundo claro: segue o verde do resto
    do site, não o ocre, que aqui aparecia como cor avulsa */
