@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">
+<g fill="none" stroke="#F2EEE7" stroke-opacity="0.10" stroke-width="1.5" stroke-linecap="round">
+<path d="M0 60 H60 q20 0 20 20 V100 q0 20 20 20 H140 q20 0 20 -20 V80 q0 -20 20 -20 H240"/>
+<path d="M0 180 H40 q20 0 20 -20 V140 q0 -20 20 -20 H120 q20 0 20 20 V160 q0 20 20 20 H240"/>
+<path d="M200 0 V60 q0 20 -20 20 H160 q-20 0 -20 20 V160 q0 20 20 20 H180 q20 0 20 20 V240"/></g>
+<g fill="#F2EEE7" fill-opacity="0.18"><circle cx="100" cy="120" r="2.8"/><circle cx="140" cy="140" r="2.8"/><circle cx="200" cy="200" r="2.4"/></g></svg>
