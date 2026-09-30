@@ -1242,3 +1242,64 @@ label.tem-erro .lead__rot{color:#9E3B2E}
    não a chamada. O véu sobe e a imagem perde um passo de presença. */
 .destaque__img{opacity:.82}
 .destaque__visual::after{background:linear-gradient(180deg,rgba(0,54,64,.42) 0%,rgba(0,54,64,.34) 34%,rgba(0,54,64,.9) 100%)}
+
+/* ==========================================================
+   GRADE DE FORMAÇÕES: UMA REGRA SÓ
+   A placa do hover dependia de nth-child(3n) para saber onde
+   ficava a ponta da linha. Só que a grade tem quatro contagens
+   de coluna conforme a largura, e essas regras foram escritas
+   para três. Em duas e em uma coluna, que é o celular, a placa
+   caía no cartão errado: era por isso que o hover mudava de
+   jeito a cada cartão.
+   A troca: nenhum cartão perde mais o recuo lateral. Quem recua
+   é a grade inteira, para fora, na mesma medida. O texto continua
+   alinhado com a coluna da página, os fios continuam no lugar, e
+   a placa passa a ser a mesma em todos os cartões, sem depender
+   de contagem nenhuma.
+   ========================================================== */
+.flist{
+  --col:3;
+  --pad-f:clamp(20px,2vw,30px);
+  grid-template-columns:repeat(var(--col),1fr);
+  margin-inline:calc(-1 * var(--pad-f));
+  gap:0;
+}
+.flist--2{--col:2}
+.flist--3{--col:3}
+.flist--4{--col:4}
+@media (max-width:1000px){ .flist,.flist--3,.flist--4{--col:2} }
+@media (max-width:640px){ .flist,.flist--2,.flist--3,.flist--4{--col:1} }
+
+.fitem{
+  padding:clamp(28px,3vw,38px) var(--pad-f);
+  border-left:1px solid var(--line);
+  border-top:0;
+}
+.band .fitem{border-left-color:rgba(242,238,231,.24);border-top-color:rgba(242,238,231,.24)}
+
+/* fio à esquerda em todos menos no primeiro de cada linha,
+   fio em cima a partir da segunda linha. Uma regra por contagem. */
+.flist .fitem:nth-child(3n+1){border-left:0}
+.flist .fitem:nth-child(n+4){border-top:1px solid var(--line)}
+.flist--2 .fitem:nth-child(n+1){border-left:1px solid var(--line);border-top:0}
+.flist--2 .fitem:nth-child(2n+1){border-left:0}
+.flist--2 .fitem:nth-child(n+3){border-top:1px solid var(--line)}
+.flist--4 .fitem:nth-child(n+1){border-left:1px solid var(--line);border-top:0}
+.flist--4 .fitem:nth-child(4n+1){border-left:0}
+.flist--4 .fitem:nth-child(n+5){border-top:1px solid var(--line)}
+@media (max-width:1000px){
+  .flist .fitem,.flist--3 .fitem,.flist--4 .fitem{border-left:1px solid var(--line);border-top:0}
+  .flist .fitem:nth-child(2n+1),.flist--3 .fitem:nth-child(2n+1),.flist--4 .fitem:nth-child(2n+1){border-left:0}
+  .flist .fitem:nth-child(n+3),.flist--3 .fitem:nth-child(n+3),.flist--4 .fitem:nth-child(n+3){border-top:1px solid var(--line)}
+}
+@media (max-width:640px){
+  .flist .fitem,.flist--2 .fitem,.flist--3 .fitem,.flist--4 .fitem{border-left:0;border-top:1px solid var(--line)}
+  .flist .fitem:first-child,.flist--2 .fitem:first-child,
+  .flist--3 .fitem:first-child,.flist--4 .fitem:first-child{border-top:0}
+}
+.band .fitem,.band .fitem:nth-child(n+1){border-left-color:rgba(242,238,231,.24);border-top-color:rgba(242,238,231,.24)}
+
+/* a placa: igual em todo cartão, sem exceção e sem contagem */
+.fitem{--placa-e:8px;--placa-d:8px}
+.fitem:first-child,.fitem:last-child,
+.fitem:nth-child(3n),.fitem:nth-child(3n+1){--placa-e:8px;--placa-d:8px}

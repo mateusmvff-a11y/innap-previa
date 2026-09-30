@@ -693,3 +693,18 @@ dialog.comparar .tabela td{color:var(--ink)}
    subiu, então sobra ar acima da cabeça em vez de faltar. */
 .ficha__foto{aspect-ratio:3/2.7}
 .ficha__img{object-position:center 16%}
+
+/* as variantes da grade seguem a regra única do home.css; as regras
+   antigas de recuo por coluna saem de cena aqui também */
+.flist--2 .fitem,.flist--3 .fitem,.flist--4 .fitem{
+  --placa-e:8px;--placa-d:8px;
+  padding-left:var(--pad-f);padding-right:var(--pad-f)}
+.flist--2 .fitem:nth-child(2n+1),.flist--3 .fitem:nth-child(3n+1),
+.flist--4 .fitem:nth-child(4n+1){padding-left:var(--pad-f)}
+.flist--2 .fitem:nth-child(2n),.flist--3 .fitem:nth-child(3n),
+.flist--4 .fitem:nth-child(4n){padding-right:var(--pad-f)}
+@media (max-width:900px){
+  .flist--2 .fitem,.flist--3 .fitem,.flist--4 .fitem{--placa-e:8px;--placa-d:8px}
+  .flist--2 .fitem:nth-child(even),.flist--3 .fitem:nth-child(even),
+  .flist--4 .fitem:nth-child(even){--placa-e:8px}
+}
