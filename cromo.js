@@ -259,3 +259,43 @@
   mostrar(0);
   andar();
 })();
+
+/* ------------------------------------------------------------------
+   Filtro de perfil do catálogo de formações.
+   As pastilhas já existiam no protótipo mas não faziam nada. Cada
+   cartão carrega os perfis que atende em data-perfil; aqui só se
+   mostra o que bate, e a contagem acompanha.
+   ------------------------------------------------------------------ */
+(function filtroPerfil() {
+  var pastilhas = document.querySelectorAll('[data-perfil-filtro]');
+  if (!pastilhas.length) return;
+  var cartoes = document.querySelectorAll('[data-perfil]');
+  if (!cartoes.length) return;
+  var contagem = document.querySelector('.contagem b');
+  var molde = contagem ? contagem.textContent.replace(/^\d+\s*/, '') : '';
+
+  function aplicar(chave) {
+    var vistos = 0;
+    for (var i = 0; i < cartoes.length; i++) {
+      var c = cartoes[i];
+      var serve = chave === 'todas' || (' ' + c.getAttribute('data-perfil') + ' ').indexOf(' ' + chave + ' ') > -1;
+      c.hidden = !serve;
+      if (serve) vistos++;
+    }
+    for (var j = 0; j < pastilhas.length; j++) {
+      var on = pastilhas[j].getAttribute('data-perfil-filtro') === chave;
+      pastilhas[j].setAttribute('aria-pressed', on ? 'true' : 'false');
+      pastilhas[j].classList.toggle('is-on', on);
+    }
+    if (contagem) {
+      contagem.textContent = vistos + ' ' + (vistos === 1 ? molde.replace(/ões\b/, 'ão').replace(/s$/, '') : molde);
+    }
+  }
+
+  for (var k = 0; k < pastilhas.length; k++) {
+    pastilhas[k].addEventListener('click', function () {
+      aplicar(this.getAttribute('data-perfil-filtro'));
+    });
+  }
+  aplicar('todas');
+})();

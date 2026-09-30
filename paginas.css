@@ -584,13 +584,10 @@ dialog.comparar .tabela td{color:var(--ink)}
    AJUSTES DO CLIENTE
    ============================================================ */
 
-/* o circuito da marca no tamanho novo e em fundo claro onde couber */
-.faixa-escura::before,.phero:not(.phero--foto)::before{background-size:360px 360px}
-.sec--claro{position:relative;overflow:hidden}
-.sec--claro::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:var(--circuito-claro);background-size:360px 360px;opacity:.5}
-.sec--claro > .wrap{position:relative;z-index:1}
-
+/* O circuito saiu dos fundos claros: atrás de texto sobre marfim ele
+   competia com a leitura. Fica só nos fundos escuros, e mais discreto. */
+.faixa-escura::before,.phero:not(.phero--foto)::before{background-size:360px 360px;opacity:.26}
+.sec--claro{position:relative;background:var(--paper)}
 /* a modalidade do curso vira etiqueta, com mais presença */
 .curso .tag,.oferta .tag{align-self:flex-start;padding:.42em .85em;border-radius:999px;
   background:rgba(12,107,94,.09);color:var(--green-2);letter-spacing:.1em}
@@ -635,3 +632,36 @@ dialog.comparar .tabela td{color:var(--ink)}
   .carrossel__seta{width:38px;height:38px}
   .carrossel__seta--antes{left:8px}.carrossel__seta--depois{right:8px}
 }
+
+/* ---------------------------------------------- filtro de perfil */
+/* display:flex nos cartões vence o hidden do navegador */
+[hidden]{display:none!important}
+.pilula[data-perfil-filtro]{cursor:pointer}
+.pilula.is-on{border-color:var(--green);background:rgba(12,107,94,.09);color:var(--green-2);font-weight:600}
+.on-dark .pilula.is-on{border-color:var(--ivory);background:rgba(242,238,231,.16);color:var(--ivory)}
+
+/* ------------------------------------------- respiro do cartão */
+/* a etiqueta de modalidade quebrava em duas linhas dentro da pílula e
+   encostava no "Comparar". Agora a linha de cima pode quebrar, e o
+   texto do cartão ganha entrelinha. */
+.curso{gap:16px;padding:clamp(28px,3vw,36px)}
+.curso__topo{flex-wrap:wrap;row-gap:10px}
+.curso .tag,.oferta .tag{line-height:1.45;padding:.5em .95em;max-width:100%;text-wrap:balance}
+.curso__comparar{margin-left:auto}
+.curso h3{line-height:1.18}
+.curso .desc{line-height:1.66;color:var(--muted)}
+.curso .fatos{margin-top:auto;padding-top:clamp(16px,1.8vw,22px);border-top:1px solid var(--line);
+  grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:16px 22px}
+.curso .fatos b{font-size:1.06rem}
+.curso .tlink{margin-top:clamp(16px,1.8vw,22px)}
+
+/* ------------------------------------ quadro à espera de retrato */
+/* sem iniciais: a sigla de duas letras gritava mais que o nome */
+.ficha__foto--vazia{background:linear-gradient(160deg,rgba(12,107,94,.09),rgba(229,210,192,.5))}
+.prof-vazio{position:absolute;inset:0;
+  background:linear-gradient(160deg,rgba(12,107,94,.12),rgba(229,210,192,.55))}
+
+/* ficha de professor ainda sem página própria: mesma grade, sem link */
+.ficha--curta .ficha__texto{gap:7px}
+.ficha--curta{cursor:default}
+.ficha--curta:hover{transform:none;box-shadow:none;border-color:var(--line)}
