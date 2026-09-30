@@ -244,21 +244,32 @@
   if (!trilho || itens.length < 2) return;
   var suave = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
-  // qual foto está no centro do trilho agora
+  // Qual item manda agora. Com um item por vez, é o que está no centro.
+  // Com vários à vista ao mesmo tempo, como no trilho de professores, o
+  // que manda é o primeiro da esquerda: senão o contador abriria em
+  // "3 de 10" sem ninguém ter rolado nada.
+  function umPorVez() {
+    return itens[0].offsetWidth > trilho.clientWidth * 0.6;
+  }
+  // rolagem em que o item i assume. O trilho tem recuo lateral, então a
+  // origem é o primeiro item, não zero.
+  function posDe(i) {
+    var base = itens[i].offsetLeft - itens[0].offsetLeft;
+    if (!umPorVez()) return base;
+    return base - (trilho.clientWidth - itens[i].offsetWidth) / 2;
+  }
   function atual() {
-    var meio = trilho.scrollLeft + trilho.clientWidth / 2;
     var melhor = 0, menor = Infinity;
-    itens.forEach(function (it, i) {
-      var c = it.offsetLeft + it.offsetWidth / 2;
-      var d = Math.abs(c - meio);
+    for (var i = 0; i < itens.length; i++) {
+      var d = Math.abs(posDe(i) - trilho.scrollLeft);
       if (d < menor) { menor = d; melhor = i; }
-    });
+    }
     return melhor;
   }
 
   function ir(i) {
-    var alvo = itens[Math.max(0, Math.min(itens.length - 1, i))];
-    trilho.scrollTo({ left: alvo.offsetLeft - trilho.offsetLeft, behavior: suave });
+    var j = Math.max(0, Math.min(itens.length - 1, i));
+    trilho.scrollTo({ left: posDe(j), behavior: suave });
   }
 
   function marcar() {
