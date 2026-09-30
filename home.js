@@ -127,10 +127,14 @@
       }
       t.cols = cols;
 
-      var caixa = svg.getBoundingClientRect(), base = H / 2, amp = 11, xs = [], ys = [];
+      // O halo tem raio 14. Com o nó a 10px da borda esquerda do SVG,
+      // ele saía 4px fora da caixa e aparecia cortado na primeira
+      // coluna. Cada nó fica agora a pelo menos um raio da borda.
+      var caixa = svg.getBoundingClientRect(), base = H / 2, amp = 11, raio = 15, xs = [], ys = [];
       for (var i = 0; i < n; i++) {
         var cb = cols[i].getBoundingClientRect();
-        xs.push(Math.round(cb.left - caixa.left + 10));
+        var x = Math.round(cb.left - caixa.left + 10);
+        xs.push(Math.min(W - raio, Math.max(raio, x)));
         ys.push(base + (i % 2 === 0 ? -amp : amp));
       }
       var d = geometria(xs, ys, 12, W);

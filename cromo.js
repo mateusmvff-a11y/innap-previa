@@ -71,6 +71,9 @@
     if (form) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        // a confirmação só aparece se o formulário estiver válido; a
+        // validação em linha, mais abaixo, é quem aponta o que falta
+        if (!form.checkValidity()) return;
         form.hidden = true;
         if (ok) ok.hidden = false;
       });
@@ -217,6 +220,7 @@
     var ok = f.parentElement.querySelector('.lead__ok');
     f.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (!f.checkValidity()) return;
       f.hidden = true;
       if (ok) { ok.hidden = false; ok.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
     });
@@ -353,4 +357,91 @@
   }, { rootMargin: '-8% 0px -8% 0px', threshold: 0 });
 
   [].forEach.call(alvos, function (el) { olho.observe(el); });
+})();
+
+/* ------------------------------------------------------------------
+   Validação em linha do formulário de orientação.
+   O que a pesquisa de UX de formulário recomenda: não acusar erro
+   enquanto a pessoa digita pela primeira vez, só ao sair do campo;
+   depois que um campo já errou, corrigir em tempo real enquanto ela
+   conserta; e, no envio, levar o foco ao primeiro campo com problema
+   em vez de deixar a pessoa procurar.
+   ------------------------------------------------------------------ */
+(function validacao() {
+  var forms = document.querySelectorAll('[data-lead-form]');
+  if (!forms.length) return;
+
+  var RECADOS = {
+    valueMissing: 'Preencha este campo para seguir.',
+    typeMismatch: 'Confira o formato deste dado.',
+    tooShort: 'Escreva um pouco mais.'
+  };
+
+  function recado(campo) {
+    var v = campo.validity;
+    if (campo.type === 'checkbox' && v.valueMissing) return 'Marque esta caixa para enviar o pedido.';
+    if (campo.name === 'whatsapp' && !v.valid && !v.valueMissing) return 'Informe um telefone com DDD.';
+    for (var k in RECADOS) { if (v[k]) return RECADOS[k]; }
+    return campo.validationMessage || 'Confira este campo.';
+  }
+
+  function aviso(campo) {
+    var rotulo = campo.closest('label');
+    if (!rotulo) return null;
+    var p = rotulo.querySelector('.lead__erro');
+    if (!p) {
+      p = document.createElement('p');
+      p.className = 'lead__erro';
+      p.id = 'erro-' + (campo.name || 'campo') + '-' + Math.random().toString(36).slice(2, 7);
+      rotulo.appendChild(p);
+    }
+    return p;
+  }
+
+  function conferir(campo) {
+    var bom = campo.checkValidity();
+    var p = aviso(campo);
+    campo.setAttribute('aria-invalid', bom ? 'false' : 'true');
+    if (p) {
+      p.textContent = bom ? '' : recado(campo);
+      if (bom) campo.removeAttribute('aria-describedby');
+      else campo.setAttribute('aria-describedby', p.id);
+    }
+    var rotulo = campo.closest('label');
+    if (rotulo) rotulo.classList.toggle('tem-erro', !bom);
+    return bom;
+  }
+
+  [].forEach.call(forms, function (form) {
+    var campos = [].slice.call(form.querySelectorAll('input,select,textarea'));
+
+    campos.forEach(function (campo) {
+      campo.addEventListener('blur', function () {
+        if (campo.value === '' && !campo.required && campo.type !== 'checkbox') return;
+        campo.dataset.tocado = '1';
+        conferir(campo);
+      });
+      // só corrige em tempo real depois que o campo já acusou erro
+      campo.addEventListener('input', function () {
+        if (campo.dataset.tocado) conferir(campo);
+      });
+      campo.addEventListener('change', function () {
+        if (campo.dataset.tocado) conferir(campo);
+      });
+    });
+
+    form.addEventListener('submit', function (e) {
+      var primeiro = null;
+      campos.forEach(function (campo) {
+        campo.dataset.tocado = '1';
+        if (!conferir(campo) && !primeiro) primeiro = campo;
+      });
+      if (primeiro) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        primeiro.focus();
+        if (primeiro.scrollIntoView) primeiro.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    }, true);
+  });
 })();
