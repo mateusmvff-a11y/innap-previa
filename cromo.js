@@ -255,30 +255,35 @@
   // logo depois do último cartão. O scroll-snap sai: ele brigaria com a
   // deriva contínua, puxando de volta para o encaixe a cada quadro.
   var semFim = raiz.hasAttribute('data-infinito');
-  var meio = 0;
+  var clones = [];
+  var volta = 0;
   if (semFim) {
     var copia = document.createDocumentFragment();
     itens.forEach(function (it) {
       var c = it.cloneNode(true);
       c.setAttribute('aria-hidden', 'true');
       [].forEach.call(c.querySelectorAll('a'), function (a) { a.setAttribute('tabindex', '-1'); });
+      clones.push(c);
       copia.appendChild(c);
     });
     trilho.appendChild(copia);
     trilho.style.scrollSnapType = 'none';
-    medirMeio();
-  }
-  function medirMeio() { meio = trilho.scrollWidth / 2; }
-  function ajustarVolta() {
-    if (!semFim || !meio) return;
-    // Vai para a frente: passou da metade, volta uma metade. Vai para
-    // trás: encostou no zero, salta para logo antes da metade. Os dois
-    // pontos mostram exatamente a mesma coisa, então o salto não se vê.
-    // O "menos um" evita que o salto de volta dispare o salto de ida.
-    if (trilho.scrollLeft >= meio) trilho.scrollLeft -= meio;
-    else if (trilho.scrollLeft <= 0) trilho.scrollLeft = meio - 1;
+    medirVolta();
   }
 
+  // A distância da volta é a largura da lista original, medida do
+  // primeiro item ao primeiro clone. Não dá para usar metade de
+  // scrollWidth: o trilho tem recuo lateral, e esse recuo entra uma vez
+  // só na largura total, então a metade cairia fora do encaixe e a volta
+  // apareceria como um tranco.
+  function medirVolta() {
+    volta = clones.length ? clones[0].offsetLeft - itens[0].offsetLeft : 0;
+  }
+  function ajustarVolta() {
+    if (!semFim || !volta || quadro) return;
+    if (trilho.scrollLeft >= volta) trilho.scrollLeft -= volta;
+    else if (trilho.scrollLeft <= 0) trilho.scrollLeft = volta - 1;
+  }
   // Qual item manda agora. Com um item por vez, é o que está no centro.
   // Com vários à vista ao mesmo tempo, como no trilho de professores, o
   // que manda é o primeiro da esquerda: senão o contador abriria em
@@ -319,11 +324,14 @@
     if (depois) depois.disabled = !semFim && trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4;
   }
 
-  // sem requestAnimationFrame: em aba de fundo ele não roda e o estado
-  // dos pontos ficava parado na primeira foto
+  // No trilho sem fim não há ponto, contador nem seta para atualizar, e
+  // a deriva escreve a rolagem a cada quadro: marcar ali seria medir o
+  // layout sessenta vezes por segundo à toa.
+  var temMarcador = pontos.length || conta || antes || depois;
   var espera = 0;
   trilho.addEventListener('scroll', function () {
     ajustarVolta();
+    if (!temMarcador) return;
     if (espera) clearTimeout(espera);
     espera = setTimeout(marcar, 60);
   }, { passive: true });
@@ -408,21 +416,33 @@
   // de pular de cartão em cartão de tempos em tempos. O movimento nunca
   // encosta numa ponta, porque a lista é duplicada e a volta acontece na
   // metade, onde as duas cópias coincidem.
+  // A posição é guardada aqui em ponto flutuante, e só depois escrita no
+  // elemento. Somar direto em trilho.scrollLeft não funciona: o
+  // navegador arredonda a cada leitura, e com 0,7 pixel por quadro o
+  // arredondamento comia o avanço. Daí o trilho ou travava de vez ou
+  // andava aos solavancos de um pixel.
   var porSegundo = 42;
-  var quadro = null, ultimoQuadro = 0;
+  var quadro = null, ultimoQuadro = 0, pos = 0;
+
   function derivar(t) {
     if (!ultimoQuadro) ultimoQuadro = t;
-    var dt = Math.min(80, t - ultimoQuadro);
+    var dt = t - ultimoQuadro;
     ultimoQuadro = t;
-    trilho.scrollLeft += porSegundo * dt / 1000;
-    ajustarVolta();
+    // um quadro perdido (aba em segundo plano, arrasto de janela) não
+    // vira um salto: o passo máximo é o de uns quatro quadros
+    if (dt > 64) dt = 64;
+    pos += porSegundo * dt / 1000;
+    if (volta && pos >= volta) pos -= volta;
+    trilho.scrollLeft = pos;
     quadro = requestAnimationFrame(derivar);
   }
-
   function andar() {
     if (!querAuto) return;
     if (semFim) {
       if (quadro) return;
+      // a deriva retoma de onde o trilho está agora, não de onde ela
+      // parou: entre uma coisa e outra a pessoa pode ter arrastado
+      pos = trilho.scrollLeft;
       ultimoQuadro = 0;
       quadro = requestAnimationFrame(derivar);
       return;
@@ -458,7 +478,7 @@
     }
   }
 
-  addEventListener('resize', function () { medirMeio(); marcar(); });
+  addEventListener('resize', function () { medirVolta(); marcar(); });
   marcar();
   }
 })();
