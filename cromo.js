@@ -445,3 +445,57 @@
     }, true);
   });
 })();
+
+/* ------------------------------------------------------------------
+   Menu de formações no cabeçalho.
+   Só com :hover do CSS o menu fechava no meio do caminho: entre o
+   gatilho e o painel há um vão, e ao atravessá-lo o ponteiro saía da
+   área. Aqui o menu ganha um atraso curto ao sair, abre no clique
+   para quem usa toque e fecha com Escape ou clique fora.
+   ------------------------------------------------------------------ */
+(function menuFormacoes() {
+  var grupos = document.querySelectorAll('.has-menu');
+  if (!grupos.length) return;
+
+  [].forEach.call(grupos, function (g) {
+    var gatilho = g.querySelector('a');
+    var relogio = null;
+
+    function abrir() {
+      if (relogio) { clearTimeout(relogio); relogio = null; }
+      g.classList.add('is-aberto');
+      if (gatilho) gatilho.setAttribute('aria-expanded', 'true');
+    }
+    function fechar(atraso) {
+      if (relogio) clearTimeout(relogio);
+      relogio = setTimeout(function () {
+        g.classList.remove('is-aberto');
+        if (gatilho) gatilho.setAttribute('aria-expanded', 'false');
+      }, atraso || 0);
+    }
+
+    if (gatilho) gatilho.setAttribute('aria-expanded', 'false');
+    g.addEventListener('pointerenter', abrir);
+    g.addEventListener('pointerleave', function () { fechar(260); });
+    g.addEventListener('focusin', abrir);
+    g.addEventListener('focusout', function (e) {
+      if (!g.contains(e.relatedTarget)) fechar(0);
+    });
+    // no toque, o primeiro toque abre em vez de seguir o link
+    if (gatilho) {
+      gatilho.addEventListener('click', function (e) {
+        if (!matchMedia('(hover: none)').matches) return;
+        if (!g.classList.contains('is-aberto')) { e.preventDefault(); abrir(); }
+      });
+    }
+    g.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { fechar(0); if (gatilho) gatilho.focus(); }
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    [].forEach.call(grupos, function (g) {
+      if (!g.contains(e.target)) g.classList.remove('is-aberto');
+    });
+  });
+})();

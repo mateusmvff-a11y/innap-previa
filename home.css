@@ -1053,19 +1053,6 @@ figure.tempo__frase figcaption{margin-top:16px;font-family:var(--label);font-siz
   .tem-circuito::before{transition:none;opacity:var(--circ)}
 }
 
-/* --------------------------------------------------- citação própria
-   A frase saiu de dentro da faixa petróleo, onde disputava com a linha
-   do tempo, e virou seção em fundo claro: sozinha, centralizada, com o
-   tamanho de uma abertura. */
-.sec--frase{background:var(--white);padding-block:clamp(64px,8vw,120px)}
-.sec--frase > .wrap{display:flex;justify-content:center}
-.frase{margin:0;max-width:100%;text-align:center;display:flex;flex-direction:column;align-items:center}
-.frase blockquote{margin:0;max-width:20ch;font-family:var(--display);font-weight:600;
-  font-size:clamp(1.6rem,3.4vw,2.7rem);line-height:1.18;letter-spacing:-.012em;
-  color:var(--ink);text-wrap:balance}
-.frase figcaption{margin-top:clamp(20px,2.2vw,28px);display:flex;align-items:center;gap:12px;
-  font-family:var(--sans);font-size:.92rem;font-weight:400;color:var(--muted)}
-.frase figcaption::before{content:"";width:28px;height:1px;background:var(--green);opacity:.55}
 
 /* ------------------------------------------ formulário de orientação
    Coluna única, que é o que a pesquisa de formulário aponta como o
@@ -1096,3 +1083,43 @@ figure.tempo__frase figcaption{margin-top:16px;font-family:var(--label);font-siz
 label.tem-erro input,label.tem-erro select,label.tem-erro textarea{border-color:#9E3B2E}
 label.tem-erro .lead__rot{color:#9E3B2E}
 .lead__aceite.tem-erro span{color:#9E3B2E}
+
+/* ----------------------------------------------- depoimento na emenda
+   Um comentário só, num cartão que senta sobre a divisa entre a faixa
+   escura e a seção seguinte, como a barra institucional faz sob o H1.
+   Numa seção branca inteira ele virava um vazio grande; encaixado na
+   emenda, costura as duas faixas e tem peso sem pedir uma tela. */
+.depo-wrap{position:relative;z-index:4;margin-top:calc(-1 * clamp(56px,6.5vw,96px))}
+.depo{position:relative;margin:0 auto;max-width:760px;
+  padding:clamp(38px,4.2vw,56px) clamp(30px,4vw,64px) clamp(32px,3.6vw,46px);
+  background:var(--paper);border:1px solid var(--line);border-radius:26px;
+  box-shadow:0 40px 90px -56px rgba(0,54,64,.5);
+  display:flex;flex-direction:column;align-items:center;text-align:center}
+.depo__aspas{position:absolute;top:clamp(-14px,-1vw,-8px);left:50%;translate:-50% 0;
+  display:grid;place-items:center;width:52px;height:52px;border-radius:50%;
+  background:var(--green);color:var(--ivory);
+  font-family:var(--display);font-size:2.1rem;font-weight:600;line-height:1;
+  padding-top:.32em}
+.depo blockquote{margin:0;max-width:24ch;font-family:var(--display);font-weight:600;
+  font-size:clamp(1.35rem,2.5vw,2.05rem);line-height:1.22;letter-spacing:-.012em;
+  color:var(--ink);text-wrap:balance}
+.depo figcaption{margin-top:clamp(22px,2.4vw,30px);display:flex;flex-wrap:wrap;justify-content:center;
+  align-items:baseline;gap:.45em}
+.depo__quem{font-family:var(--sans);font-size:1rem;font-weight:600;color:var(--ink)}
+.depo__onde{font-family:var(--sans);font-size:.9rem;font-weight:400;color:var(--muted)}
+@media (max-width:620px){
+  .depo{border-radius:20px}
+  .depo__aspas{width:44px;height:44px;font-size:1.7rem}
+}
+
+/* ------------------------------------------------- menu de formações
+   Entre o gatilho e o painel havia um vão de 10px. Ao descer o mouse
+   para escolher um curso o ponteiro saía da área de hover no meio do
+   caminho e o menu fechava sozinho. O vão continua no desenho, mas
+   agora é coberto por uma ponte invisível, e o JavaScript ainda segura
+   o menu aberto por um instante depois que o ponteiro sai. */
+.menu::before{content:"";position:absolute;left:-8px;right:-8px;top:-14px;height:14px}
+.has-menu.is-aberto .menu{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.has-menu.is-aberto .caret{transform:rotate(180deg)}
+.nav .has-menu > a{padding-block:.55em}
+.depo__sep{color:var(--muted);opacity:.7}
