@@ -717,3 +717,12 @@ dialog.comparar .tabela td{color:var(--ink)}
 
 /* a galeria respira mais que uma seção comum: a foto é o conteúdo */
 .sec--galeria .head{max-width:56ch}
+
+/* o circuito é um sistema só, definido em home.css; aqui só se garante
+   que as regras desta folha não voltem a fixar opacidade por conta */
+.faixa-escura::before,.phero:not(.phero--foto)::before{opacity:var(--circ)}
+.tem-circuito::before{opacity:0;transition:opacity 1.1s var(--ease)}
+.tem-circuito.circuito-on::before{opacity:var(--circ)}
+@media (prefers-reduced-motion:reduce){
+  .tem-circuito::before{transition:none;opacity:var(--circ)}
+}

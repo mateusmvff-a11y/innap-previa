@@ -328,3 +328,27 @@
   }
   aplicar('todas');
 })();
+
+/* ------------------------------------------------------------------
+   A trama da marca entra e sai em fade conforme a seção chega à dobra.
+   Sem isto a trama fica parada na opacidade final, que é o estado que
+   o CSS já descreve: aqui só se acrescenta o movimento.
+   ------------------------------------------------------------------ */
+(function circuito() {
+  var alvos = document.querySelectorAll(
+    '.anchor,.cta-final,.final,.tempo-sec,.destaque__visual,.abas__lista,' +
+    '.faixa-escura,.phero:not(.phero--foto)'
+  );
+  if (!alvos.length || !window.IntersectionObserver) return;
+
+  var lista = [].slice.call(alvos);
+  lista.forEach(function (el) { el.classList.add('tem-circuito'); });
+
+  var olho = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      e.target.classList.toggle('circuito-on', e.isIntersecting);
+    });
+  }, { rootMargin: '-8% 0px -8% 0px', threshold: 0 });
+
+  lista.forEach(function (el) { olho.observe(el); });
+})();
