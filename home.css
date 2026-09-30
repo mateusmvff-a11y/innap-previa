@@ -1237,3 +1237,8 @@ label.tem-erro .lead__rot{color:#9E3B2E}
 .destaque__visual::before{display:none}
 .destaque__visual::after{background:linear-gradient(180deg,rgba(0,54,64,.18) 0%,rgba(0,54,64,.1) 38%,rgba(0,54,64,.86) 100%)}
 .destaque__n{text-shadow:0 1px 10px rgba(0,54,64,.55)}
+
+/* a foto do destaque entra mais discreta: ela é apoio da chamada,
+   não a chamada. O véu sobe e a imagem perde um passo de presença. */
+.destaque__img{opacity:.82}
+.destaque__visual::after{background:linear-gradient(180deg,rgba(0,54,64,.42) 0%,rgba(0,54,64,.34) 34%,rgba(0,54,64,.9) 100%)}

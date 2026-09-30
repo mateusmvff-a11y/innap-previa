@@ -244,6 +244,33 @@
   if (!trilho || itens.length < 2) return;
   var suave = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
+  // ---------------------------------------------------------- sem fim
+  // O trilho sem fim não tem ponta: a lista é duplicada e, quando a
+  // rolagem passa da metade, volta a mesma distância para trás. Como as
+  // duas metades são iguais, o olho não vê o salto e o começo aparece
+  // logo depois do último cartão. O scroll-snap sai: ele brigaria com a
+  // deriva contínua, puxando de volta para o encaixe a cada quadro.
+  var semFim = raiz.hasAttribute('data-infinito');
+  var meio = 0;
+  if (semFim) {
+    var copia = document.createDocumentFragment();
+    itens.forEach(function (it) {
+      var c = it.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      [].forEach.call(c.querySelectorAll('a'), function (a) { a.setAttribute('tabindex', '-1'); });
+      copia.appendChild(c);
+    });
+    trilho.appendChild(copia);
+    trilho.style.scrollSnapType = 'none';
+    medirMeio();
+  }
+  function medirMeio() { meio = trilho.scrollWidth / 2; }
+  function ajustarVolta() {
+    if (!semFim || !meio) return;
+    if (trilho.scrollLeft >= meio) trilho.scrollLeft -= meio;
+    else if (trilho.scrollLeft < 0) trilho.scrollLeft += meio;
+  }
+
   // Qual item manda agora. Com um item por vez, é o que está no centro.
   // Com vários à vista ao mesmo tempo, como no trilho de professores, o
   // que manda é o primeiro da esquerda: senão o contador abriria em
@@ -280,20 +307,33 @@
     if (conta) conta.textContent = i + 1;
     // nas pontas a seta desliga em vez de virar a volta: o trilho tem
     // começo e fim visíveis, dar a volta confunde
-    if (antes) antes.disabled = trilho.scrollLeft < 4;
-    if (depois) depois.disabled = trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4;
+    if (antes) antes.disabled = !semFim && trilho.scrollLeft < 4;
+    if (depois) depois.disabled = !semFim && trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4;
   }
 
   // sem requestAnimationFrame: em aba de fundo ele não roda e o estado
   // dos pontos ficava parado na primeira foto
   var espera = 0;
   trilho.addEventListener('scroll', function () {
+    ajustarVolta();
     if (espera) clearTimeout(espera);
     espera = setTimeout(marcar, 60);
   }, { passive: true });
 
-  if (antes) antes.addEventListener('click', function () { parar(); ir(atual() - 1); });
-  if (depois) depois.addEventListener('click', function () { parar(); ir(atual() + 1); });
+  // Num trilho sem fim a seta anda a largura de um cartão, sem mirar
+  // índice: o índice não quer dizer nada quando a lista se repete.
+  function passoUmCartao(sentido) {
+    parar();
+    if (semFim) {
+      var passo = itens[1] ? itens[1].offsetLeft - itens[0].offsetLeft : itens[0].offsetWidth;
+      trilho.scrollBy({ left: sentido * passo, behavior: suave });
+      setTimeout(andar, 900);
+      return;
+    }
+    ir(atual() + sentido);
+  }
+  if (antes) antes.addEventListener('click', function () { passoUmCartao(-1); });
+  if (depois) depois.addEventListener('click', function () { passoUmCartao(1); });
   pontos.forEach(function (p, i) { p.addEventListener('click', function () { parar(); ir(i); }); });
   trilho.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowLeft') { e.preventDefault(); ir(atual() - 1); }
@@ -331,8 +371,10 @@
     if (e && e.pointerId != null && trilho.hasPointerCapture(e.pointerId)) {
       trilho.releasePointerCapture(e.pointerId);
     }
-    trilho.style.scrollSnapType = '';
-    ir(atual());
+    trilho.style.scrollSnapType = semFim ? 'none' : '';
+    // num trilho sem fim não há encaixe: soltar não puxa para cartão nenhum
+    if (!semFim) ir(atual());
+    ajustarVolta();
     marcar();
   }
   trilho.addEventListener('pointerup', soltar);
@@ -354,19 +396,40 @@
   var pouco = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var querAuto = raiz.hasAttribute('data-auto') && !pouco;
 
+  // Trilho sem fim: deriva contínua, um fio de pixel por quadro, em vez
+  // de pular de cartão em cartão de tempos em tempos. O movimento nunca
+  // encosta numa ponta, porque a lista é duplicada e a volta acontece na
+  // metade, onde as duas cópias coincidem.
+  var porSegundo = 42;
+  var quadro = null, ultimoQuadro = 0;
+  function derivar(t) {
+    if (!ultimoQuadro) ultimoQuadro = t;
+    var dt = Math.min(80, t - ultimoQuadro);
+    ultimoQuadro = t;
+    trilho.scrollLeft += porSegundo * dt / 1000;
+    ajustarVolta();
+    quadro = requestAnimationFrame(derivar);
+  }
+
   function andar() {
-    if (!querAuto || relogio) return;
+    if (!querAuto) return;
+    if (semFim) {
+      if (quadro) return;
+      ultimoQuadro = 0;
+      quadro = requestAnimationFrame(derivar);
+      return;
+    }
+    if (relogio) return;
     relogio = setInterval(function () {
-      // A volta é decidida pela rolagem, não pelo índice. Com cinco
-      // cartões à vista o último índice alcançável é o sexto, então
-      // pedir o décimo travava o trilho no fim e a rotação parava de
-      // parecer rotação.
+      // A volta é decidida pela rolagem, não pelo índice: com vários
+      // cartões à vista o último índice alcançável não é o último item.
       var noFim = trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 8;
       ir(noFim ? 0 : atual() + 1);
     }, 3600);
   }
   function parar() {
     if (relogio) { clearInterval(relogio); relogio = null; }
+    if (quadro) { cancelAnimationFrame(quadro); quadro = null; }
   }
   if (querAuto) {
     // A rotação começa por conta própria. O observador só serve para
@@ -387,7 +450,7 @@
     }
   }
 
-  addEventListener('resize', marcar);
+  addEventListener('resize', function () { medirMeio(); marcar(); });
   marcar();
   }
 })();
