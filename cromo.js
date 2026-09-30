@@ -461,10 +461,27 @@
     }, 3600);
   }
   function parar() {
+    // uma retomada pendente não pode ressuscitar a deriva com o ponteiro
+    // ainda em cima do trilho
+    if (retomada) { clearTimeout(retomada); retomada = null; }
     if (relogio) { clearInterval(relogio); relogio = null; }
     if (quadro) { cancelAnimationFrame(quadro); quadro = null; }
   }
+  // A deriva escreve a rolagem a cada quadro. Se a pessoa rolar o
+  // trilho por fora do arrasto, com o trackpad ou com o dedo, a deriva
+  // desfaria o gesto no quadro seguinte e o trilho brigaria com a mão.
+  // Nesses dois casos ela sai do caminho e volta um instante depois.
+  var retomada = null;
+  function pausarUmPouco() {
+    parar();
+    if (retomada) clearTimeout(retomada);
+    retomada = setTimeout(andar, 1200);
+  }
+
   if (querAuto) {
+    trilho.addEventListener('wheel', pausarUmPouco, { passive: true });
+    trilho.addEventListener('touchstart', parar, { passive: true });
+    trilho.addEventListener('touchend', pausarUmPouco, { passive: true });
     // Começa junto com a página e não para mais. Antes havia um
     // observador que pausava a rotação fora da tela: o resultado era
     // que o trilho ficava parado até a pessoa chegar nele, e só então
