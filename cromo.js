@@ -232,15 +232,16 @@
    Setas, pontos, teclado e avanço automático que pausa no hover.
    ============================================================ */
 (function carrossel() {
-  var raiz = document.querySelector('[data-carrossel]');
-  if (!raiz) return;
+  [].forEach.call(document.querySelectorAll('[data-carrossel]'), montar);
+
+  function montar(raiz) {
   var trilho = raiz.querySelector('[data-trilho]');
   var itens = [].slice.call(raiz.querySelectorAll('.carrossel__item'));
   var pontos = [].slice.call(raiz.querySelectorAll('[data-ir]'));
   var antes = raiz.querySelector('[data-antes]');
   var depois = raiz.querySelector('[data-depois]');
   var conta = raiz.querySelector('[data-conta]');
-  if (itens.length < 2) return;
+  if (!trilho || itens.length < 2) return;
   var suave = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
 
   // qual foto está no centro do trilho agora
@@ -268,8 +269,8 @@
     if (conta) conta.textContent = i + 1;
     // nas pontas a seta desliga em vez de virar a volta: o trilho tem
     // começo e fim visíveis, dar a volta confunde
-    antes.disabled = trilho.scrollLeft < 4;
-    depois.disabled = trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4;
+    if (antes) antes.disabled = trilho.scrollLeft < 4;
+    if (depois) depois.disabled = trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4;
   }
 
   // sem requestAnimationFrame: em aba de fundo ele não roda e o estado
@@ -280,8 +281,8 @@
     espera = setTimeout(marcar, 60);
   }, { passive: true });
 
-  antes.addEventListener('click', function () { ir(atual() - 1); });
-  depois.addEventListener('click', function () { ir(atual() + 1); });
+  if (antes) antes.addEventListener('click', function () { ir(atual() - 1); });
+  if (depois) depois.addEventListener('click', function () { ir(atual() + 1); });
   pontos.forEach(function (p, i) { p.addEventListener('click', function () { ir(i); }); });
   trilho.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowLeft') { e.preventDefault(); ir(atual() - 1); }
@@ -336,6 +337,7 @@
 
   addEventListener('resize', marcar);
   marcar();
+  }
 })();
 
 /* ------------------------------------------------------------------
