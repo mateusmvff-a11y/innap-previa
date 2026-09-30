@@ -984,3 +984,26 @@ figure.tempo__frase figcaption{margin-top:16px;font-family:var(--label);font-siz
 .sec-foot{display:flex;align-items:baseline;gap:14px 22px;flex-wrap:wrap}
 .sec-foot__nota{font-family:var(--label);font-size:.68rem;font-weight:600;letter-spacing:.14em;
   text-transform:uppercase;color:var(--muted)}
+
+/* -------------------------------------- abas de perfil na identidade
+   A composição da referência fica igual: lista numerada à esquerda em
+   faixa escura, painel à direita. Muda o que vinha de fora do sistema:
+   o grafite quase preto vira petróleo, o branco puro vira papel, e o
+   acento na faixa escura passa a ser o rosé, que é o que o site usa
+   sobre escuro em toda parte. O circuito da marca entra na coluna
+   escura, discreto, como nas outras faixas petróleo. */
+.abas{background:var(--paper);box-shadow:var(--shadow-sm)}
+.abas__lista{position:relative;background:var(--petrol);isolation:isolate}
+.abas__lista::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:var(--circuito);background-size:360px 360px;opacity:.22}
+.abas__aba{color:rgba(242,238,231,.66);border-bottom-color:rgba(242,238,231,.14)}
+.abas__aba::before{background:var(--rose)}
+.abas__aba:hover{background:rgba(242,238,231,.06)}
+.abas__aba.is-on{background:rgba(242,238,231,.1)}
+.abas__n{color:rgba(242,238,231,.46)}
+.abas__aba.is-on .abas__n{color:var(--rose)}
+/* o eyebrow do painel está sobre fundo claro: segue o verde do resto
+   do site, não o ocre, que aqui aparecia como cor avulsa */
+.abas__painel .eyebrow{color:var(--green-2)}
+.abas__painel h3{font-family:var(--display);color:var(--ink)}
+.abas__painel .tlink{color:var(--green-2)}
