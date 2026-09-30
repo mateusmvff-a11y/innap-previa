@@ -468,8 +468,24 @@ function destaqueDeCurso(no, largura) {
 }
 
 /* ------------------------------------------------- despacho */
+function folhaDeTexto(no, escuro, largura) {
+  /* um título ou parágrafo solto direto dentro da seção. Sem isto o
+     H1 dos heros se perdia: o genérico só olha para os filhos, e uma
+     folha de texto não tem filhos. */
+  var t = limpo(no.text) || (((no.kids || []).length === 0) ? '' : '');
+  if (!t) return null;
+  if (tem(no, 'eyebrow|rotulo')) return eyebrow(t, escuro);
+  if (tem(no, 'tlink')) return linkSeta(t, escuro);
+  if (tem(no, 'btn')) return botao(t, tem(no, 'btn-primary') ? 'primary' : 'ghost', escuro);
+  if (no.tag === 'h1') return txt(t, { display: true, size: 54, lh: 106, w: largura, cor: escuro ? HEX.ivory : HEX.ink });
+  if (no.tag === 'h2') return txt(t, { display: true, size: 40, w: largura, cor: escuro ? HEX.ivory : HEX.ink });
+  if (no.tag === 'h3' || no.tag === 'h4') return txt(t, { display: true, size: 24, w: largura, cor: escuro ? HEX.ivory : HEX.ink });
+  return txt(t, { size: 17.5, w: Math.min(largura, 660), cor: escuro ? HEX.ivory : HEX.muted, op: escuro ? 0.88 : 1 });
+}
+
 function bloco(no, escuro, largura) {
   if (!no) return null;
+  if (!(no.kids || []).length) return folhaDeTexto(no, escuro, largura);
   if (tem(no, 'instglass')) return barraInstitucional(no, largura);
   if (tem(no, 'head-row')) {
     var c = frame({ dir: 'h', gap: 60, w: largura, name: 'Cabeçalho em linha' });
