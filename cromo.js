@@ -235,6 +235,10 @@
   [].forEach.call(document.querySelectorAll('[data-carrossel]'), montar);
 
   function montar(raiz) {
+  // um trilho só se monta uma vez: montar duas vezes duplicaria de novo
+  // a lista do trilho sem fim, e ela cresceria a cada chamada
+  if (raiz.dataset.montado) return;
+  raiz.dataset.montado = '1';
   var trilho = raiz.querySelector('[data-trilho]');
   var itens = [].slice.call(raiz.querySelectorAll('.carrossel__item'));
   var pontos = [].slice.call(raiz.querySelectorAll('[data-ir]'));
@@ -267,8 +271,12 @@
   function medirMeio() { meio = trilho.scrollWidth / 2; }
   function ajustarVolta() {
     if (!semFim || !meio) return;
+    // Vai para a frente: passou da metade, volta uma metade. Vai para
+    // trás: encostou no zero, salta para logo antes da metade. Os dois
+    // pontos mostram exatamente a mesma coisa, então o salto não se vê.
+    // O "menos um" evita que o salto de volta dispare o salto de ida.
     if (trilho.scrollLeft >= meio) trilho.scrollLeft -= meio;
-    else if (trilho.scrollLeft < 0) trilho.scrollLeft += meio;
+    else if (trilho.scrollLeft <= 0) trilho.scrollLeft = meio - 1;
   }
 
   // Qual item manda agora. Com um item por vez, é o que está no centro.
