@@ -1059,8 +1059,8 @@ figure.tempo__frase figcaption{margin-top:16px;font-family:var(--label);font-siz
    tamanho de uma abertura. */
 .sec--frase{background:var(--white);padding-block:clamp(64px,8vw,120px)}
 .sec--frase > .wrap{display:flex;justify-content:center}
-.frase{margin:0;max-width:26ch;text-align:center;display:flex;flex-direction:column;align-items:center}
-.frase blockquote{margin:0;font-family:var(--display);font-weight:600;
+.frase{margin:0;max-width:100%;text-align:center;display:flex;flex-direction:column;align-items:center}
+.frase blockquote{margin:0;max-width:20ch;font-family:var(--display);font-weight:600;
   font-size:clamp(1.6rem,3.4vw,2.7rem);line-height:1.18;letter-spacing:-.012em;
   color:var(--ink);text-wrap:balance}
 .frase figcaption{margin-top:clamp(20px,2.2vw,28px);display:flex;align-items:center;gap:12px;
