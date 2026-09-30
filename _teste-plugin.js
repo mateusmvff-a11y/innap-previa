@@ -406,7 +406,7 @@ function depoimento(no, largura) {
   return c;
 }
 
-function abasDePerfil(no, largura) {
+function abasDePerfil(no, largura, ativo) {
   var lista = filhoPorClasse(no, 'abas__lista');
   var palco = filhoPorClasse(no, 'abas__palco');
   var c = frame({ dir: 'h', w: largura, radius: 24, clip: true, name: 'Abas de perfil', stroke: LINE, fill: HEX.paper });
@@ -415,14 +415,14 @@ function abasDePerfil(no, largura) {
   ((lista && lista.kids) || []).forEach(function (k, i) {
     var l = textoDe(k);
     var aba = frame({ dir: 'h', gap: 14, px: 26, py: 26, w: largEsq, align: 'CENTER', name: 'Aba',
-      fill: i === 0 ? HEX.ivory : null, fillOp: i === 0 ? 0.1 : 0 });
-    aba.appendChild(txt(l[0] || String(i + 1), { size: 13.4, cor: i === 0 ? HEX.rose : HEX.ivory, op: i === 0 ? 1 : 0.46 }));
-    aba.appendChild(txt(l[1] || '', { size: 16, semi: true, cor: HEX.ivory, op: i === 0 ? 1 : 0.66, w: largEsq - 90 }));
+      fill: i === ativo ? HEX.ivory : null, fillOp: i === ativo ? 0.1 : 0 });
+    aba.appendChild(txt(l[0] || String(i + 1), { size: 13.4, cor: i === ativo ? HEX.rose : HEX.ivory, op: i === ativo ? 1 : 0.46 }));
+    aba.appendChild(txt(l[1] || '', { size: 16, semi: true, cor: HEX.ivory, op: i === ativo ? 1 : 0.66, w: largEsq - 90 }));
     esq.appendChild(aba);
   });
   c.appendChild(esq);
   var dir = frame({ gap: 16, p: 40, w: largura - largEsq, name: 'Painel' });
-  var primeiro = (palco && palco.kids && palco.kids[0]) || null;
+  var primeiro = (palco && palco.kids && palco.kids[ativo]) || null;
   (((primeiro && primeiro.kids) || [])).forEach(function (k) {
     var t = limpo(k.text) || primeiroTexto(k);
     if (!t) return;
@@ -497,7 +497,15 @@ function bloco(no, escuro, largura) {
   }
   if (tem(no, 'head')) return cabecalhoDeSecao(no, escuro, largura);
   if (tem(no, 'destaque\b')) return destaqueDeCurso(no, largura);
-  if (tem(no, 'abas')) return abasDePerfil(no, largura);
+  if (tem(no, 'abas')) {
+    /* No Figma nada é clicável: se só o painel ativo fosse desenhado,
+       os outros dois sumiriam do arquivo. Vão os três, um por estado. */
+    var listaA = filhoPorClasse(no, 'abas__lista');
+    var quantos = ((listaA && listaA.kids) || []).length || 1;
+    var pilha = frame({ gap: 26, w: largura, name: 'Abas de perfil · estados' });
+    for (var a = 0; a < quantos; a++) pilha.appendChild(abasDePerfil(no, largura, a));
+    return pilha;
+  }
   if (tem(no, 'depo\b')) return depoimento(no, largura);
   if (tem(no, 'tempo__lista|tempo\b')) return linhaDoTempo(filhoPorClasse(no, 'tempo__lista') || no, largura);
   if (tem(no, 'cursos')) return grade(no, escuro, largura, largura > 900 ? 3 : 2, cartaoCurso, 'Cursos');
