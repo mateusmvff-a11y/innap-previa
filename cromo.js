@@ -369,19 +369,21 @@
     if (relogio) { clearInterval(relogio); relogio = null; }
   }
   if (querAuto) {
+    // A rotação começa por conta própria. O observador só serve para
+    // pausar quando a seção sai da tela: se ele não responder, por
+    // qualquer motivo, o carrossel continua girando em vez de ficar
+    // parado esperando um aviso que não vem.
+    andar();
     raiz.addEventListener('pointerenter', parar);
     raiz.addEventListener('pointerleave', andar);
     raiz.addEventListener('focusin', parar);
     raiz.addEventListener('focusout', function (e) {
       if (!raiz.contains(e.relatedTarget)) andar();
     });
-    // fora da tela não faz sentido girar
     if (window.IntersectionObserver) {
       new IntersectionObserver(function (es) {
         es.forEach(function (e) { if (e.isIntersecting) andar(); else parar(); });
-      }, { threshold: 0.2 }).observe(raiz);
-    } else {
-      andar();
+      }, { threshold: 0.15 }).observe(raiz);
     }
   }
 
