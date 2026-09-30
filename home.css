@@ -1303,3 +1303,45 @@ label.tem-erro .lead__rot{color:#9E3B2E}
 .fitem{--placa-e:8px;--placa-d:8px}
 .fitem:first-child,.fitem:last-child,
 .fitem:nth-child(3n),.fitem:nth-child(3n+1){--placa-e:8px;--placa-d:8px}
+
+/* ==========================================================
+   CELULAR: RESPIRO E ALVO DE TOQUE
+   O respiro entre seções era o mesmo do desktop, 84px em cima
+   e 84 embaixo. Numa tela de 375 isso vira meia tela de vazio
+   entre um assunto e outro, e a página passava de quinze mil
+   pixels. Os links de seta tinham 25px de altura, metade do
+   alvo mínimo confortável para o polegar.
+   ========================================================== */
+@media (max-width:640px){
+  :root{--sec:clamp(52px,13vw,68px);--gut:22px}
+
+  /* o hero cabe na tela: a coluna de texto não precisa de dois
+     respiros de 96px dentro de uma dobra de 812 */
+  .hero{min-height:auto;padding-bottom:40px}
+  .hero-text{padding-block:clamp(84px,13vh,104px) 0}
+  .hero-flut{margin-top:26px;padding-top:20px;gap:14px}
+  .hero-flut__item{flex:1 1 100%;max-width:none;
+    display:grid;grid-template-columns:auto 1fr;align-items:baseline;gap:4px 10px}
+  .hero-flut__item span{white-space:nowrap}
+  .hero-cta{margin-top:26px;gap:10px}
+  .hero-cta .btn{flex:1 1 100%;justify-content:center}
+
+  /* a barra institucional encosta menos e ocupa menos */
+  .instwrap{margin-top:-28px}
+  .instcell{min-height:0;padding:20px}
+
+  /* link de seta e link de rodapé: alvo de polegar */
+  .tlink{padding-block:9px}
+  .fcol a,.legal a{padding-block:7px;display:inline-block}
+  .sec-foot{margin-top:clamp(24px,5vw,34px)}
+
+  /* cartões e grades param de empilhar respiro sobre respiro */
+  .flist{margin-top:clamp(28px,6vw,40px)}
+  .fitem{padding-block:26px}
+  .mods,.profs,.arts,.exp-grid{margin-top:clamp(28px,6vw,40px)}
+  .head{gap:12px}
+  .destaque{margin-top:clamp(28px,6vw,40px)}
+  .abas{margin-top:clamp(28px,6vw,40px)}
+  .depo-wrap{margin-top:calc(-1 * clamp(24px,6vw,40px))}
+  .depo{padding:26px 22px 24px}
+}
