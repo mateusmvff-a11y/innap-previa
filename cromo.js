@@ -357,9 +357,13 @@
   function andar() {
     if (!querAuto || relogio) return;
     relogio = setInterval(function () {
-      var i = atual();
-      ir(i + 1 >= itens.length ? 0 : i + 1);
-    }, 3800);
+      // A volta é decidida pela rolagem, não pelo índice. Com cinco
+      // cartões à vista o último índice alcançável é o sexto, então
+      // pedir o décimo travava o trilho no fim e a rotação parava de
+      // parecer rotação.
+      var noFim = trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 8;
+      ir(noFim ? 0 : atual() + 1);
+    }, 3600);
   }
   function parar() {
     if (relogio) { clearInterval(relogio); relogio = null; }
