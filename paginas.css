@@ -606,57 +606,6 @@ dialog.comparar .tabela td{color:var(--ink)}
 .orienta .lead__copy h2{font-size:clamp(1.6rem,2.8vw,2.3rem);margin:12px 0 12px}
 .orienta .lead__ok{padding:28px 0 8px}
 
-/* ---------------------------------------------------------- carrossel
-   Trilho de rolagem com scroll-snap, não pilha trocando por opacidade.
-   A rolagem é nativa: arrastar com o dedo ou com o trackpad funciona
-   sem JavaScript nenhum. A foto seguinte fica espiando na borda, que é
-   o que avisa que há mais. Nada gira sozinho. */
-.carrossel{position:relative;margin-top:clamp(30px,3.4vw,44px)}
-.carrossel__trilho{display:flex;gap:clamp(12px,1.4vw,18px);margin:0;padding:0 0 4px;list-style:none;
-  overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.carrossel__trilho::-webkit-scrollbar{display:none}
-.carrossel__trilho:focus-visible{outline:2px solid var(--rose);outline-offset:6px;border-radius:var(--radius-lg)}
-.carrossel__item{flex:0 0 min(88%,1000px);scroll-snap-align:center}
-.carrossel__item figure{margin:0}
-.carrossel__item img{width:100%;aspect-ratio:16/9;object-fit:cover;
-  border-radius:var(--radius-lg);background:rgba(242,238,231,.06)}
-.carrossel__item figcaption{margin-top:12px;font-family:var(--sans);font-size:.9rem;
-  color:rgba(242,238,231,.72);line-height:1.5}
-/* a foto que não está no centro recua um passo, para o olho saber
-   onde está a leitura */
-.carrossel__item{transition:opacity .4s var(--ease)}
-@supports (animation-timeline:view()){
-  .carrossel__item{animation:carrosselFoco linear both;animation-timeline:view(inline);
-    animation-range:cover 12% cover 88%}
-  @keyframes carrosselFoco{0%,100%{opacity:.42}45%,55%{opacity:1}}
-}
-
-.carrossel__barra{margin-top:clamp(18px,2vw,26px);display:flex;align-items:center;
-  gap:16px 22px;flex-wrap:wrap}
-.carrossel__pontos{display:flex;align-items:center;gap:8px}
-.carrossel__ponto{width:9px;height:9px;padding:0;border-radius:50%;
-  background:rgba(242,238,231,.34);transition:background .3s var(--ease),width .3s var(--ease)}
-.carrossel__ponto:hover{background:rgba(242,238,231,.6)}
-.carrossel__ponto[aria-current]{background:var(--rose);width:26px;border-radius:999px}
-.carrossel__conta{font-family:var(--sans);font-size:.88rem;color:rgba(242,238,231,.7)}
-.carrossel__conta b{color:var(--ivory);font-weight:600}
-.carrossel__setas{margin-left:auto;display:flex;gap:10px}
-.carrossel__seta{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;
-  border:1px solid rgba(242,238,231,.3);color:var(--ivory);background:transparent;
-  transition:border-color .3s var(--ease),background .3s var(--ease),opacity .3s var(--ease)}
-.carrossel__seta:hover:not(:disabled){border-color:var(--ivory);background:rgba(242,238,231,.12)}
-.carrossel__seta:disabled{opacity:.3;cursor:default}
-.carrossel__seta svg{width:21px;height:21px}
-@media (max-width:620px){
-  .carrossel__item{flex-basis:92%}
-  .carrossel__setas{margin-left:0}
-  .carrossel__seta{width:40px;height:40px}
-}
-@media (prefers-reduced-motion:reduce){
-  .carrossel__trilho{scroll-behavior:auto}
-  .carrossel__item{animation:none;opacity:1}
-}
 /* ---------------------------------------------- filtro de perfil */
 /* display:flex nos cartões vence o hidden do navegador */
 [hidden]{display:none!important}
@@ -737,6 +686,3 @@ dialog.comparar .tabela td{color:var(--ink)}
 .sec--galeria .head .lead{max-width:52ch;margin-inline:auto}
 
 /* o trilho se arrasta com o mouse, então o cursor precisa dizer isso */
-.carrossel__trilho{cursor:grab}
-.carrossel__trilho.esta-arrastando{cursor:grabbing;scroll-behavior:auto;user-select:none}
-.carrossel__trilho.esta-arrastando img{pointer-events:none}
