@@ -665,3 +665,11 @@ dialog.comparar .tabela td{color:var(--ink)}
 .ficha--curta .ficha__texto{gap:7px}
 .ficha--curta{cursor:default}
 .ficha--curta:hover{transform:none;box-shadow:none;border-color:var(--line)}
+
+/* rodapé do cartão de curso: link e "comparar" na mesma linha */
+.curso__acoes{margin-top:clamp(16px,1.8vw,22px);display:flex;align-items:center;
+  justify-content:space-between;gap:12px 18px;flex-wrap:wrap}
+.curso__acoes .tlink{margin-top:0}
+.curso__acoes .curso__comparar{margin-left:0}
+.curso__topo{display:block}
+.curso .tag{display:inline-block}
