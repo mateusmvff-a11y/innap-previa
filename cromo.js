@@ -279,10 +279,15 @@
   function medirVolta() {
     volta = clones.length ? clones[0].offsetLeft - itens[0].offsetLeft : 0;
   }
+  // A volta para trás só vale enquanto a pessoa arrasta. Fora disso o
+  // trilho parado no zero atendia a qualquer evento de rolagem saltando
+  // 3199 pixels de uma vez, e esse era o "clique" que aparecia ao chegar
+  // na seção. Para a frente a volta pode acontecer sempre: ela só é
+  // alcançada por quem já andou até lá.
   function ajustarVolta() {
     if (!semFim || !volta || quadro) return;
     if (trilho.scrollLeft >= volta) trilho.scrollLeft -= volta;
-    else if (trilho.scrollLeft <= 0) trilho.scrollLeft = volta - 1;
+    else if (arrastando && trilho.scrollLeft <= 0) trilho.scrollLeft = volta - 1;
   }
   // Qual item manda agora. Com um item por vez, é o que está no centro.
   // Com vários à vista ao mesmo tempo, como no trilho de professores, o
@@ -460,10 +465,13 @@
     if (quadro) { cancelAnimationFrame(quadro); quadro = null; }
   }
   if (querAuto) {
-    // A rotação começa por conta própria. O observador só serve para
-    // pausar quando a seção sai da tela: se ele não responder, por
-    // qualquer motivo, o carrossel continua girando em vez de ficar
-    // parado esperando um aviso que não vem.
+    // Começa junto com a página e não para mais. Antes havia um
+    // observador que pausava a rotação fora da tela: o resultado era
+    // que o trilho ficava parado até a pessoa chegar nele, e só então
+    // arrancava do zero. Fora da tela o próprio navegador já segura os
+    // quadros, então não havia nada a economizar. O que sobra é o que
+    // interessa: quando a pessoa chega na seção, o carrossel já está
+    // andando há um tempo.
     andar();
     raiz.addEventListener('pointerenter', parar);
     raiz.addEventListener('pointerleave', andar);
@@ -471,14 +479,12 @@
     raiz.addEventListener('focusout', function (e) {
       if (!raiz.contains(e.relatedTarget)) andar();
     });
-    if (window.IntersectionObserver) {
-      new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) andar(); else parar(); });
-      }, { threshold: 0.15 }).observe(raiz);
-    }
   }
 
   addEventListener('resize', function () { medirVolta(); marcar(); });
+  // as fotos entram depois do HTML: a medida da volta é refeita quando
+  // tudo terminou de carregar, senão ela pode sair de um layout provisório
+  addEventListener('load', medirVolta);
   marcar();
   }
 })();
