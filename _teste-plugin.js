@@ -343,22 +343,29 @@ function grade(no, escuro, largura, colunas, desenha, nome, gap) {
 }
 
 function itemDeLista(no, escuro, largura) {
+  /* Recolhe tudo em vez de escolher quatro campos fixos: era assim que
+     os h4 e os parágrafos extras da grade de experiência e das turmas
+     se perdiam pelo caminho. */
   var c = frame({ gap: 12, w: largura, py: 28, px: 22, name: 'Item' });
-  var tag = '', titulo = '', desc = '', link = '';
+  var tags = [], titulos = [], paras = [], links = [];
   (function anda(n) {
     var t = limpo(n.text);
     if (t) {
-      if (tem(n, 'tag')) tag = t;
-      else if (n.tag === 'h3') titulo = t;
-      else if (tem(n, 'tlink')) link = t;
-      else if (!desc) desc = t;
+      if (tem(n, 'tag|mtag|rotulo|eyebrow')) tags.push(t);
+      else if (n.tag === 'h3' || n.tag === 'h4' || n.tag === 'h5') titulos.push(t);
+      else if (tem(n, 'tlink|btn')) links.push(t);
+      else paras.push(t);
     }
     (n.kids || []).forEach(anda);
   })(no);
-  if (tag) c.appendChild(pastilha(tag, escuro, true));
-  if (titulo) c.appendChild(txt(titulo, { display: true, size: 22, w: largura - 44, cor: escuro ? HEX.ivory : HEX.ink }));
-  if (desc) c.appendChild(txt(desc, { size: 15, w: largura - 44, cor: escuro ? HEX.ivory : HEX.muted, op: escuro ? 0.74 : 1 }));
-  if (link) c.appendChild(linkSeta(link, escuro));
+  tags.forEach(function (t) { c.appendChild(pastilha(t, escuro, true)); });
+  titulos.forEach(function (t, i) {
+    c.appendChild(txt(t, { display: true, size: i === 0 ? 22 : 18, w: largura - 44, cor: escuro ? HEX.ivory : HEX.ink }));
+  });
+  paras.forEach(function (t) {
+    c.appendChild(txt(t, { size: 15, w: largura - 44, cor: escuro ? HEX.ivory : HEX.muted, op: escuro ? 0.74 : 1 }));
+  });
+  links.forEach(function (t) { c.appendChild(linkSeta(t, escuro)); });
   return c;
 }
 
@@ -510,7 +517,17 @@ function bloco(no, escuro, largura) {
   if (tem(no, 'tempo__lista|tempo\b')) return linhaDoTempo(filhoPorClasse(no, 'tempo__lista') || no, largura);
   if (tem(no, 'cursos')) return grade(no, escuro, largura, largura > 900 ? 3 : 2, cartaoCurso, 'Cursos');
   if (tem(no, 'fichas')) return grade(no, escuro, largura, 3, fichaProfessor, 'Professores');
-  if (tem(no, 'profs-car__trilho|profs\b')) return grade(no, escuro, largura, 4, cartaoProfessor, 'Professores', 18);
+  if (tem(no, 'profs-car')) {
+    /* o trilho e a barra de ação são irmãos: a barra tem o botão para
+       o diretório, e ela se perderia se o trilho tomasse o bloco todo */
+    var p = frame({ gap: 26, w: largura, name: 'Professores em carrossel' });
+    var trilho = filhoPorClasse(no, 'carrossel__trilho');
+    if (trilho) { var g2 = grade(trilho, escuro, largura, 4, cartaoProfessor, 'Professores', 18); if (g2) p.appendChild(g2); }
+    var barra = filhoPorClasse(no, 'carrossel__barra');
+    if (barra) { var b2 = bloco(barra, escuro, largura); if (b2) p.appendChild(b2); }
+    return p;
+  }
+  if (tem(no, 'profs\b')) return grade(no, escuro, largura, 4, cartaoProfessor, 'Professores', 18);
   if (tem(no, 'flist|mods|arts|exp-grid|turmas')) {
     var n = (no.kids || []).length;
     return grade(no, escuro, largura, n >= 6 ? 3 : (n >= 4 ? 2 : Math.max(n, 1)), itemDeLista, 'Grade', 0);
