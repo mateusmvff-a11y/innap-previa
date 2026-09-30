@@ -268,10 +268,12 @@
     depois.disabled = trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4;
   }
 
-  var espera = null;
+  // sem requestAnimationFrame: em aba de fundo ele não roda e o estado
+  // dos pontos ficava parado na primeira foto
+  var espera = 0;
   trilho.addEventListener('scroll', function () {
-    if (espera) cancelAnimationFrame(espera);
-    espera = requestAnimationFrame(marcar);
+    if (espera) clearTimeout(espera);
+    espera = setTimeout(marcar, 60);
   }, { passive: true });
 
   antes.addEventListener('click', function () { ir(atual() - 1); });
