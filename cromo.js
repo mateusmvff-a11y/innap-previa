@@ -341,14 +341,16 @@
   );
   if (!alvos.length || !window.IntersectionObserver) return;
 
-  var lista = [].slice.call(alvos);
-  lista.forEach(function (el) { el.classList.add('tem-circuito'); });
-
+  // A classe que apaga a trama é posta pelo próprio observador, nunca
+  // antes dele. Se o observador não responder, por qualquer motivo, a
+  // trama fica no estado que o CSS descreve e continua visível, em vez
+  // de sumir do site inteiro por causa de um script.
   var olho = new IntersectionObserver(function (entradas) {
     entradas.forEach(function (e) {
+      e.target.classList.add('tem-circuito');
       e.target.classList.toggle('circuito-on', e.isIntersecting);
     });
   }, { rootMargin: '-8% 0px -8% 0px', threshold: 0 });
 
-  lista.forEach(function (el) { olho.observe(el); });
+  [].forEach.call(alvos, function (el) { olho.observe(el); });
 })();
