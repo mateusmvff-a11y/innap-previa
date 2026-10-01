@@ -223,16 +223,11 @@ ul.marcas li::marker{color:var(--green)}
 .sec > .wrap > .pilulas{margin-bottom:16px}
 .sec > .wrap > .pilulas + .lead{max-width:62ch}
 
-/* o curso em destaque do catálogo usa o bloco aprovado da Home */
-.destaque .curso__comparar{margin-top:2px}
-.destaque__copy .fatos{padding-top:18px;border-top:1px solid var(--line);margin-top:4px}
-.destaque__copy .btn{align-self:flex-start;margin-top:6px}
 .cursos{margin-top:clamp(34px,3.6vw,48px)}
 
 /* espaço de respiro entre os blocos irmãos de uma seção */
 .sec > .wrap > * + *{margin-top:clamp(18px,2vw,26px)}
 .sec > .wrap > .head + *,.sec > .wrap > .head-row + *{margin-top:clamp(30px,3.4vw,44px)}
-.sec > .wrap > .destaque + .cursos{margin-top:clamp(40px,4.4vw,60px)}
 
 /* ---------------------------------------------------------- linha do tempo no claro
    A da Home foi desenhada para o fundo petróleo. Fora dele o texto
@@ -482,8 +477,8 @@ dialog.comparar .tabela td{color:var(--ink)}
 .fatos--longo b{font-family:var(--sans);font-size:1rem;font-weight:500;line-height:1.5;color:var(--ink)}
 .on-dark .fatos span{color:var(--rose)}
 .on-dark .fatos b{color:var(--ivory)}
-.oferta .fatos,.curso .fatos,.destaque__copy .fatos{grid-template-columns:1fr 1fr;gap:16px 20px}
-.oferta .fatos b,.curso .fatos b,.destaque__copy .fatos b{font-size:1.02rem}
+.oferta .fatos,.curso .fatos{grid-template-columns:1fr 1fr;gap:16px 20px}
+.oferta .fatos b,.curso .fatos b{font-size:1.02rem}
 
 /* CENTRALIZAÇÃO: as seções centralizadas centravam a caixa, mas o título
    com largura máxima ficava encostado à esquerda dentro dela. */
@@ -524,7 +519,7 @@ dialog.comparar .tabela td{color:var(--ink)}
 .on-dark .bloco > .fatos > div{background:rgba(242,238,231,.07);border-color:rgba(242,238,231,.22)}
 .on-dark .bloco > .fatos > div:hover{border-color:rgba(242,238,231,.4);background:rgba(242,238,231,.11)}
 /* dentro de cartões continua sem caixa, senão vira caixa dentro de caixa */
-.oferta .fatos > div,.curso .fatos > div,.destaque__copy .fatos > div,
+.oferta .fatos > div,.curso .fatos > div,
 .painel .fatos > div,.phero .fatos > div{padding:0;background:none;border:0;border-radius:0}
 
 /* a grade fecha embaixo e as células vazias seguram os fios */

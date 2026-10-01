@@ -9,7 +9,12 @@
   /* ---------------------------------------------------------- topo */
   var hdr = document.getElementById('hdr');
   if (hdr) {
-    var marca = function () { hdr.classList.toggle('scrolled', scrollY > 24); };
+    /* O cabeçalho transparente é desenhado para ficar sobre o hero escuro,
+       com logo e menu em marfim. Páginas que abrem direto no conteúdo
+       claro (os artigos) ficavam com marfim sobre marfim até a pessoa
+       rolar 24 px; nelas o cabeçalho já nasce no estado sólido. */
+    var semHero = !document.querySelector('.hero, .phero');
+    var marca = function () { hdr.classList.toggle('scrolled', semHero || scrollY > 24); };
     marca();
     addEventListener('scroll', marca, { passive: true });
   }

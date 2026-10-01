@@ -181,6 +181,9 @@
     [].forEach.call(document.querySelectorAll('.proc-rail g'), function (e) { e.classList.add('on'); });
     [].forEach.call(document.querySelectorAll('.tempo__item'), function (e) { e.classList.add('on'); });
   }
+  /* A captura do Figma (captura.js) chama isto para medir a página no
+     estado final, com tudo já revelado. Fica exposto só por isso. */
+  window.innapTudoVisivel = tudoVisivel;
 
   /* ---------------------------------------------------------- animação */
   function iniciar(gsap, ST) {
