@@ -214,17 +214,234 @@
   aplicar(botoes[0].textContent);
 })();
 
-/* formulários fora do diálogo: mesma resposta ao enviar */
-(function formularioSolto() {
-  [].forEach.call(document.querySelectorAll('.orienta [data-lead-form]'), function (f) {
-    var ok = f.parentElement.querySelector('.lead__ok');
+/* ============================================================
+   Encontre sua formação
+   Cinco perguntas, uma por vez, e uma primeira orientação no fim.
+   Perguntas, opções e regras do resultado são as do protótipo
+   v0.12, uma a uma. O que muda é só o desenho.
+   ============================================================ */
+(function orientador() {
+  var raiz = document.querySelector('[data-orientador]');
+  if (!raiz) return;
+  var caixa = raiz.querySelector('[data-oc-caixa]');
+  var passo = raiz.querySelector('[data-oc-passo]');
+  var barra = raiz.querySelector('.orientador__progresso');
+  var barraI = barra.querySelector('i');
+  var resultado = raiz.querySelector('[data-oc-resultado]');
+
+  var PASSOS = [
+    { chave: 'school', titulo: 'Qual é sua escolaridade?', opcoes: [
+      ['fundamental_incompleto', 'Ainda não concluí o Ensino Fundamental'],
+      ['fundamental', 'Ensino Fundamental concluído'],
+      ['medio_curso', 'Ensino Médio em curso'],
+      ['medio', 'Ensino Médio completo'],
+      ['graduacao_curso', 'Graduação em curso'],
+      ['graduacao', 'Graduação concluída']
+    ] },
+    { chave: 'profile', titulo: 'Qual situação mais se aproxima da sua?', opcoes: [
+      ['saude', 'Sou profissional da saúde'],
+      ['terapeuta', 'Já atuo como terapeuta'],
+      ['inicio', 'Quero iniciar uma nova área'],
+      ['pessoal', 'Busco conhecimento pessoal']
+    ] },
+    { chave: 'goal', titulo: 'O que você quer encontrar agora?', dinamica: true },
+    { chave: 'moment', titulo: 'Quando você imagina começar?', opcoes: [
+      ['agora', 'Assim que possível'],
+      ['meses', 'Nos próximos meses'],
+      ['comparando', 'Estou comparando opções'],
+      ['pesquisando', 'Estou apenas pesquisando'],
+      ['ano', 'Talvez no próximo ano']
+    ] },
+    { chave: 'contact', titulo: 'Para receber calendário, investimento e orientação', contato: true }
+  ];
+
+  var respostas = {};
+  var idx = 0;
+
+  /* o terceiro passo depende da situação escolhida no segundo */
+  function objetivos() {
+    var p = respostas.profile;
+    if (p === 'saude') return [
+      ['orto', 'Estudar Terapia Ortomolecular'],
+      ['nat', 'Fazer uma formação ampla em Naturopatia'],
+      ['fito', 'Estudar Fitoterapia'],
+      ['ampliar', 'Ampliar repertório de cuidado']
+    ];
+    if (p === 'terapeuta') return [
+      ['nat', 'Organizar e ampliar minha formação com Naturopatia'],
+      ['psi', 'Receber notícias da próxima turma de Psicanálise'],
+      ['fito', 'Aprofundar Fitoterapia'],
+      ['especifica', 'Conhecer outra área']
+    ];
+    return [
+      ['florais', 'Começar por Florais'],
+      ['irido', 'Conhecer Iridologia'],
+      ['auriculo', 'Conhecer Auriculoterapia'],
+      ['amplo', 'Construir um percurso mais amplo']
+    ];
+  }
+
+  function el(tag, classe, texto) {
+    var e = document.createElement(tag);
+    if (classe) e.className = classe;
+    if (texto) e.textContent = texto;
+    return e;
+  }
+
+  function rolarAte(alvo) {
+    var calmo = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var topo = alvo.getBoundingClientRect().top;
+    if (topo < 80 || topo > innerHeight * 0.6) {
+      alvo.scrollIntoView({ block: 'start', behavior: calmo ? 'auto' : 'smooth' });
+    }
+  }
+
+  /* ---------------------------------------------------------- contato */
+  function campo(rotulo, nome, atributos, opcional) {
+    var l = el('label');
+    var r = el('span', 'lead__rot', rotulo);
+    if (opcional) {
+      r.appendChild(document.createTextNode(' '));
+      r.appendChild(el('span', 'lead__op', 'opcional'));
+    }
+    var i = el('input');
+    i.name = nome;
+    for (var a in atributos) { i.setAttribute(a, atributos[a]); }
+    if (!opcional) i.required = true;
+    l.appendChild(r);
+    l.appendChild(i);
+    return { rotulo: l, campo: i };
+  }
+
+  function formularioContato() {
+    var f = el('form', 'lead__form orientador__contato');
+    f.setAttribute('data-lead-form', '');
+    f.noValidate = true;
+    var nome = campo('Nome', 'nome', { type: 'text', autocomplete: 'name' }, false);
+    var zap = campo('WhatsApp', 'whatsapp', { type: 'tel', inputmode: 'tel', autocomplete: 'tel' }, false);
+    var mail = campo('E-mail', 'email', { type: 'email', autocomplete: 'email', inputmode: 'email' }, false);
+    var prof = campo('Profissão', 'profissao', { type: 'text', autocomplete: 'organization-title' }, true);
+    var cidade = campo('Cidade e estado', 'cidade', { type: 'text', autocomplete: 'address-level2' }, true);
+    [nome, zap, mail, prof, cidade].forEach(function (c) { f.appendChild(c.rotulo); });
+
+    /* telefone com DDD: dez a treze dígitos, em qualquer formatação */
+    function conferirFone() {
+      var n = zap.campo.value.split('').filter(function (c) { return c >= '0' && c <= '9'; }).length;
+      zap.campo.setCustomValidity(zap.campo.value && (n < 10 || n > 13) ? 'Informe um telefone com DDD.' : '');
+    }
+    zap.campo.addEventListener('input', conferirFone);
+    zap.campo.addEventListener('change', conferirFone);
+
+    var enviar = el('button', 'btn btn-primary lead__enviar', 'Ver resultado');
+    enviar.type = 'submit';
+    f.appendChild(enviar);
+    f.appendChild(el('p', 'lead__nota', 'Seus dados serão usados para responder a esta solicitação.'));
+
+    if (window.innapLigarValidacao) window.innapLigarValidacao(f);
     f.addEventListener('submit', function (e) {
       e.preventDefault();
+      conferirFone();
       if (!f.checkValidity()) return;
-      f.hidden = true;
-      if (ok) { ok.hidden = false; ok.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+      concluir();
     });
-  });
+    return f;
+  }
+
+  /* ---------------------------------------------------------- perguntas */
+  function desenhar(comFoco) {
+    var p = PASSOS[idx];
+    var pct = Math.round((idx + 1) / PASSOS.length * 100);
+    barraI.style.setProperty('--p', pct + '%');
+    barra.setAttribute('aria-valuenow', String(pct));
+    passo.textContent = '';
+    var titulo = el('h2', 'orientador__titulo', p.titulo);
+    titulo.tabIndex = -1;
+    passo.appendChild(titulo);
+    if (p.contato) {
+      passo.appendChild(formularioContato());
+    } else {
+      var lista = el('div', 'orientador__opcoes');
+      (p.dinamica ? objetivos() : p.opcoes).forEach(function (o) {
+        var b = el('button', 'orientador__opcao', o[1]);
+        b.type = 'button';
+        b.addEventListener('click', function () {
+          respostas[p.chave] = o[0];
+          idx++;
+          desenhar(true);
+        });
+        lista.appendChild(b);
+      });
+      passo.appendChild(lista);
+    }
+    if (comFoco) {
+      titulo.focus({ preventScroll: true });
+      /* a pergunta nova pode ser mais curta que a anterior: se o topo da
+         caixa ficou escondido sob o cabeçalho, traz de volta */
+      rolarAte(caixa);
+    }
+  }
+
+  /* ---------------------------------------------------------- resultado */
+  function concluir() {
+    var r = respostas;
+    var principal = 'Naturopatia';
+    var outras = ['Fitoterapia', 'Iridologia'];
+    var nota = 'A equipe confirmará a modalidade adequada à sua escolaridade.';
+    if (r.school === 'fundamental_incompleto') {
+      principal = 'Lista de espera'; outras = ['Conteúdos do INNAP'];
+      nota = 'No momento, o cadastro será mantido para futuras formações adequadas ao seu momento.';
+    } else if (r.goal === 'orto') {
+      principal = 'Terapia Ortomolecular'; outras = ['Naturopatia', 'Fitoterapia'];
+    } else if (r.goal === 'fito') {
+      principal = 'Fitoterapia'; outras = ['Naturopatia', 'Terapia Ortomolecular'];
+    } else if (r.goal === 'psi') {
+      principal = 'Psicanálise'; outras = ['Naturopatia'];
+      nota = 'A Psicanálise está com nova turma em planejamento. Seu contato entra na lista de interesse.';
+    } else if (r.goal === 'florais') {
+      principal = 'Florais'; outras = ['Iridologia', 'Auriculoterapia'];
+    } else if (r.goal === 'irido') {
+      principal = 'Iridologia'; outras = ['Florais', 'Auriculoterapia'];
+    } else if (r.goal === 'auriculo') {
+      principal = 'Auriculoterapia'; outras = ['Florais', 'Iridologia'];
+    } else if (r.profile === 'saude') {
+      principal = 'Terapia Ortomolecular'; outras = ['Naturopatia', 'Fitoterapia'];
+    } else if (r.profile === 'terapeuta') {
+      principal = 'Naturopatia'; outras = ['Psicanálise'];
+    } else {
+      principal = 'Florais'; outras = ['Iridologia'];
+    }
+
+    resultado.textContent = '';
+    resultado.appendChild(el('span', 'orientador__selo', 'Primeira orientação'));
+    var h = el('h2', 'orientador__titulo orientador__titulo--resultado', principal);
+    h.tabIndex = -1;
+    resultado.appendChild(h);
+    resultado.appendChild(el('p', '', nota));
+
+    var linha1 = el('p');
+    linha1.appendChild(el('strong', '', 'Outras opções para comparar:'));
+    linha1.appendChild(document.createTextNode(' ' + outras.join(', ')));
+    resultado.appendChild(linha1);
+
+    var linha2 = el('p');
+    linha2.appendChild(el('strong', '', 'Taxa de inscrição:'));
+    linha2.appendChild(document.createTextNode(' R$ 200 nas matrículas abertas.'));
+    resultado.appendChild(linha2);
+
+    var cta = el('div', 'orientador__cta');
+    var a = el('a', 'btn btn-primary', 'Conversar com o comercial');
+    a.href = 'contato.html';
+    cta.appendChild(a);
+    resultado.appendChild(cta);
+    resultado.appendChild(el('p', 'orientador__nota', 'Durante o horário de atendimento, a equipe comercial trabalha com prazo de resposta de até 15 minutos. O horário ainda será confirmado para publicação.'));
+
+    caixa.hidden = true;
+    resultado.hidden = false;
+    h.focus({ preventScroll: true });
+    rolarAte(resultado);
+  }
+
+  desenhar(false);
 })();
 
 /* ============================================================
@@ -582,7 +799,6 @@
    ------------------------------------------------------------------ */
 (function validacao() {
   var forms = document.querySelectorAll('[data-lead-form]');
-  if (!forms.length) return;
 
   var RECADOS = {
     valueMissing: 'Preencha este campo para seguir.',
@@ -625,7 +841,10 @@
     return bom;
   }
 
-  [].forEach.call(forms, function (form) {
+  /* Liga a validação a um formulário. O assistente de orientação cria o
+     seu passo de contato depois que a página carrega, então ele chama
+     esta mesma função em vez de ter uma validação própria. */
+  function ligar(form) {
     var campos = [].slice.call(form.querySelectorAll('input,select,textarea'));
 
     campos.forEach(function (campo) {
@@ -656,7 +875,9 @@
         if (primeiro.scrollIntoView) primeiro.scrollIntoView({ block: 'center', behavior: 'smooth' });
       }
     }, true);
-  });
+  }
+  [].forEach.call(forms, ligar);
+  window.innapLigarValidacao = ligar;
 })();
 
 /* ------------------------------------------------------------------

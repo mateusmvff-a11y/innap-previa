@@ -599,12 +599,56 @@ dialog.comparar .tabela td{color:var(--ink)}
 .arts[data-vazio="true"]::after{content:"Nenhum conteúdo nesta categoria por enquanto.";
   grid-column:1/-1;color:var(--muted);font-size:.95rem}
 
-/* pedido de orientação solto na página */
-.orienta{background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);
-  padding:clamp(28px,3.4vw,48px);box-shadow:var(--shadow-sm);position:relative;z-index:1}
-.orienta .lead__copy{max-width:56ch;margin-bottom:clamp(26px,3vw,36px)}
-.orienta .lead__copy h2{font-size:clamp(1.6rem,2.8vw,2.3rem);margin:12px 0 12px}
-.orienta .lead__ok{padding:28px 0 8px}
+/* ------------------------------------------------ Encontre sua formação
+   Duas colunas, como no protótipo v0.12: o texto de apoio de um lado e,
+   do outro, a pergunta com a barra de andamento. No fim a caixa da
+   pergunta dá lugar ao resultado, na mesma coluna. As cinco perguntas
+   vêm de cromo.js; aqui só o desenho. */
+.orientador{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+  gap:clamp(28px,4.5vw,64px);align-items:start}
+.orientador__texto h2{font-size:var(--fs-h2);margin:0 0 18px}
+.orientador__texto .intro{color:var(--muted);font-size:var(--fs-lead);line-height:1.62;max-width:44ch}
+.orientador__nota{margin-top:16px;max-width:46ch;font-size:.88rem;line-height:1.6;color:var(--muted)}
+.orientador__nota a{color:var(--green);text-decoration:underline;text-underline-offset:3px}
+
+.orientador__caixa{scroll-margin-top:96px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:clamp(24px,3.2vw,44px);box-shadow:var(--shadow-sm)}
+.orientador__progresso{height:4px;border-radius:999px;background:var(--line);overflow:hidden;
+  margin-bottom:clamp(22px,2.6vw,32px)}
+.orientador__progresso i{display:block;height:100%;width:var(--p);background:var(--green);
+  border-radius:inherit;transition:width .45s var(--ease)}
+.orientador__titulo{margin:0 0 22px;font-size:clamp(1.45rem,2.3vw,2rem);line-height:1.12;outline:none}
+.orientador__opcoes{display:grid;gap:10px}
+.orientador__opcao{display:block;width:100%;text-align:left;padding:17px 20px;
+  border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);color:var(--ink);
+  font-family:var(--sans);font-size:1rem;line-height:1.4;
+  transition:border-color .2s var(--ease),background .2s var(--ease)}
+.orientador__opcao:hover,.orientador__opcao:focus-visible{border-color:var(--green);background:rgba(12,107,94,.07)}
+.orientador__contato{max-width:none}
+
+/* cada pergunta entra com um leve deslize; quem pede menos movimento não vê */
+@media (prefers-reduced-motion:no-preference){
+  .orientador__passo > *{animation:orientadorEntra .4s var(--ease) both}
+  .orientador__resultado > *{animation:orientadorEntra .5s var(--ease) both}
+}
+@keyframes orientadorEntra{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.orientador__resultado{background:var(--petrol);color:var(--ivory);border-radius:var(--radius-lg);
+  padding:clamp(28px,3.6vw,48px);box-shadow:var(--shadow);scroll-margin-top:96px}
+.orientador__resultado p{color:rgba(242,238,231,.84);line-height:1.6}
+.orientador__resultado p + p{margin-top:12px}
+.orientador__resultado strong{color:var(--ivory);font-weight:600}
+.orientador__selo{display:inline-flex;margin-bottom:18px;padding:.5em 1em;
+  border:1px solid rgba(242,238,231,.28);border-radius:999px;background:rgba(242,238,231,.06);
+  font-family:var(--label);font-size:.84rem;font-weight:400;color:var(--rose)}
+.orientador__titulo--resultado{margin:0 0 16px;font-size:clamp(2rem,3.8vw,2.9rem);color:var(--ivory)}
+.orientador__cta{margin-top:28px}
+.orientador__resultado .orientador__nota{margin-top:22px;color:rgba(242,238,231,.62)}
+
+@media (max-width:860px){
+  .orientador{grid-template-columns:1fr;gap:28px}
+  .orientador__texto .intro,.orientador__nota{max-width:60ch}
+}
 
 /* ---------------------------------------------- filtro de perfil */
 /* display:flex nos cartões vence o hidden do navegador */
@@ -664,9 +708,6 @@ dialog.comparar .tabela td{color:var(--ink)}
 .lead__aceite input{width:19px;height:19px;flex:0 0 auto;margin:1px 0 0;accent-color:var(--green)}
 .lead__aceite span{flex:1 1 auto}
 
-/* a galeria respira mais que uma seção comum: a foto é o conteúdo */
-.sec--galeria .head{max-width:56ch}
-
 /* o circuito é um sistema só, definido em home.css; aqui só se garante
    que as regras desta folha não voltem a fixar opacidade por conta */
 .faixa-escura::before,.phero:not(.phero--foto)::before{opacity:var(--circ)}
@@ -675,17 +716,6 @@ dialog.comparar .tabela td{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){
   .tem-circuito::before{transition:none;opacity:var(--circ)}
 }
-
-/* o formulário solto usa o mesmo desenho de coluna única do diálogo */
-.orienta .lead__form{max-width:560px}
-.orienta{max-width:760px;margin-inline:auto}
-
-/* ------------------------------------- galeria: texto centralizado */
-.sec--galeria .head{max-width:56ch;margin-inline:auto;text-align:center;align-items:center}
-.sec--galeria .head .eyebrow{justify-content:center}
-.sec--galeria .head .lead{max-width:52ch;margin-inline:auto}
-
-/* o trilho se arrasta com o mouse, então o cursor precisa dizer isso */
 
 /* ------------------------------------- retrato da ficha com mais ar
    A janela 3:2.1 sobre um retrato 3:3.8 cortava a testa de quem está
@@ -712,7 +742,9 @@ dialog.comparar .tabela td{color:var(--ink)}
 /* celular: mesmo respiro das seções da Home nas páginas internas */
 @media (max-width:640px){
   .phero{padding-block:clamp(86px,15vh,120px) clamp(34px,7vw,48px)}
-  .orienta{padding:26px 20px}
+  .orientador__caixa{padding:22px 18px}
+  .orientador__resultado{padding:26px 20px}
+  .orientador__opcao{padding:15px 16px}
   .fichas,.cursos,.turmas,.tabela-rolo{margin-top:clamp(26px,6vw,36px)}
   .ficha__texto{padding:22px}
   .curso{padding:24px 22px}
