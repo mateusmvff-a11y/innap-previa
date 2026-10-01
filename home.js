@@ -220,7 +220,14 @@
       });
     }
     var medir = function () { montarTrilhos().forEach(ligarTrilho); };
-    var recalcular = function () { medir(); ST.refresh(); };
+    var recalcular = function () {
+      /* Quem pediu menos movimento não tem rolagem acendendo o trilho do
+         processo. Ao mudar a largura o trilho é refeito já aceso por inteiro;
+         antes ele ressuscitava o gatilho de rolagem e voltava a acender só
+         o primeiro passo. */
+      if (pouco) { montarTrilhos(); tudoVisivel(); return; }
+      medir(); ST.refresh();
+    };
     addEventListener('resize', recalcular, { passive: true });
 
     if (pouco) { montarTrilhos(); tudoVisivel(); return; }
