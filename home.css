@@ -1125,11 +1125,13 @@ label.tem-erro .lead__rot{color:#9E3B2E}
 .depo__quem{font-family:var(--sans);font-size:.95rem;font-weight:600;color:var(--ink)}
 .depo__sep{color:var(--muted);opacity:.6}
 .depo__onde{font-family:var(--sans);font-size:.88rem;font-weight:400;color:var(--muted)}
-/* a foto de quem assina: pequena e redonda, com um anel claro que a
-   separa do vidro. Sem foto, o cartão é só o nome, como sempre foi. */
-.depo__foto{flex:0 0 auto;width:56px;height:56px;border-radius:50%;object-fit:cover;
-  border:2px solid rgba(255,255,255,.9);box-shadow:0 10px 22px -12px rgba(0,54,64,.6)}
-@media (max-width:620px){.depo figcaption{flex-direction:column;gap:10px}}
+/* a foto de quem assina: uma bolinha ao lado do nome, com um anel claro
+   que a separa do vidro. Sem foto, o cartão é só o nome, como sempre foi. */
+.depo__foto{flex:0 0 auto;display:block;width:56px;height:56px;border-radius:50%;overflow:hidden;
+  border:2px solid rgba(255,255,255,.9);box-shadow:0 10px 22px -12px rgba(0,54,64,.6);
+  background:var(--rose)}
+.depo__foto img{display:block;width:100%;height:100%;object-fit:cover}
+@media (max-width:620px){.depo__foto{width:48px;height:48px}}
 @media (max-width:620px){.depo{border-radius:20px}}
 /* sem backdrop-filter o cartão fica sólido, porque translúcido sem
    desfoque sobre a faixa escura derrubaria a legibilidade do texto */
